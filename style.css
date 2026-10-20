@@ -534,51 +534,6 @@ footer {
     }
 }
 
-/* ========== ẢNH PHANH.SVG BAY NHƯ BÓNG BAY ========== */
-.special-firework {
-    position: absolute;
-    top: 100%;
-    display: block;
-    width: 140px;
-    height: 140px;
-    object-fit: contain;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 10;
-    filter: drop-shadow(0 5px 10px rgb(255 94 157 / 25%));
-    animation: phanh-balloon 7s linear forwards;
-    will-change: transform, opacity;
-}
-
-@keyframes phanh-balloon {
-    0% {
-        opacity: 0;
-        transform: translate3d(0, 0, 0) rotate(-8deg);
-    }
-
-    8% {
-        opacity: 1;
-    }
-
-    25% {
-        transform: translate3d(18px, -30vh, 0) rotate(7deg);
-    }
-
-    50% {
-        transform: translate3d(-16px, -62vh, 0) rotate(-6deg);
-    }
-
-    75% {
-        opacity: 1;
-        transform: translate3d(14px, -92vh, 0) rotate(5deg);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate3d(-8px, -125vh, 0) rotate(-4deg);
-    }
-}
-
 /* ========== BÓNG BÓNG TRÁI TIM BAY LÊN ========== */
 .heart-bubble {
     position: absolute;
@@ -674,11 +629,6 @@ footer {
 
     .card-actions {
         padding: 0 20px 24px;
-    }
-
-    .special-firework {
-        width: 100px;
-        height: 100px;
     }
 
     .heart-bubble {

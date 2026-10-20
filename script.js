@@ -33,12 +33,10 @@ const FIREWORK_COLORS = [
 const HEART_COLORS = ["#ff5c96", "#ff8fab", "#f7a8d8", "#d98bff", "#ffb6c9"];
 
 const MAX_FIREWORKS = isMobile ? 2 : 3;
-const MAX_SPECIAL_BALLOONS = isMobile ? 2 : 3;
 const MAX_HEART_BUBBLES = isMobile ? 6 : 10;
 const SCREEN_FADE_MS = 300;
 
 let recipientName = "";
-let specialRecipient = false;
 let cardShown = false;
 let sessionId = 0;
 let screenToken = 0;
@@ -108,17 +106,6 @@ function showScreen(next) {
 
         next.classList.remove("hidden", "leaving");
     }, prev === next ? 0 : wait);
-}
-
-/* ========== KIỂM TRA TÊN ĐẶC BIỆT ========== */
-function isSpecialName(name) {
-    const normalized = name
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/đ/gi, "d")
-        .toLowerCase();
-
-    return normalized.includes("p") && normalized.includes("a");
 }
 
 /* ========== SAO LẤP LÁNH ========== */
@@ -239,57 +226,6 @@ function startRandomFireworks() {
     }, randomBetween(1200, 2300), currentSession);
 }
 
-/* ========== ẢNH PHANH.SVG BAY NHƯ BÓNG BAY ========== */
-function createSpecialFirework(x) {
-    if (!canAnimate() || !specialRecipient) return;
-
-    if (effectsLayer.querySelectorAll(".special-firework").length >= MAX_SPECIAL_BALLOONS) return;
-
-    const img = document.createElement("img");
-    const duration = randomBetween(6, 8);
-
-    img.src = "phanh.svg";
-    img.className = "special-firework";
-    img.alt = "";
-    img.draggable = false;
-    img.decoding = "async";
-
-    img.style.left = x + "%";
-    img.style.animationDuration = duration + "s";
-
-    img.onerror = () => {
-        console.error("Không tải được phanh.svg. Kiểm tra file nằm cùng thư mục với index.html.");
-        img.remove();
-    };
-
-    effectsLayer.appendChild(img);
-    removeWhenDone(img, (duration + 0.5) * 1000);
-}
-
-/* ========== BẮN NHIỀU ẢNH PHANH BAY LÊN ========== */
-function launchSpecialFireworks() {
-    if (!cardShown || !specialRecipient || reduceMotion) return;
-
-    const currentSession = sessionId;
-    const total = isMobile ? 4 : 7;
-
-    function launchOne(index) {
-        if (!cardShown || currentSession !== sessionId) return;
-
-        createSpecialFirework(randomBetween(8, 88));
-
-        if (index + 1 < total) {
-            scheduleEffect(
-                () => launchOne(index + 1),
-                randomBetween(500, 900),
-                currentSession
-            );
-        }
-    }
-
-    scheduleEffect(() => launchOne(0), 250, currentSession);
-}
-
 /* ========== ĐỢT TRÁI TIM PHÁO HOA ========== */
 function createHeartBurst(total) {
     if (!cardShown || reduceMotion) return;
@@ -372,7 +308,6 @@ nameForm.addEventListener("submit", (event) => {
 
     inputError.textContent = "";
     recipientName = enteredName;
-    specialRecipient = isSpecialName(recipientName);
 
     updatePersonalizedText(recipientName);
 
@@ -399,8 +334,6 @@ decodeButton.addEventListener("click", () => {
         launchFireworks();
         startRandomFireworks();
         startHeartBubbles();
-
-        if (specialRecipient) launchSpecialFireworks();
     }, startDelay);
 });
 
@@ -420,10 +353,6 @@ moreHeartsButton.addEventListener("click", () => {
     }
 
     createFirework(randomBetween(20, 80), randomBetween(25, 55), true);
-
-    if (specialRecipient) {
-        createSpecialFirework(randomBetween(15, 85));
-    }
 });
 
 /* ========== QUAY LẠI MÀN HÌNH NHẬP TÊN ========== */
