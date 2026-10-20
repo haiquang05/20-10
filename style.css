@@ -812,3 +812,11 @@ h2 {
         animation-iteration-count: 1 !important;
     }
 }
+.button-group {
+    margin-top: 28px;
+}
+
+.button-group .primary-button,
+.button-group .secondary-button {
+    margin-top: 8px;
+}
