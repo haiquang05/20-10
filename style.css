@@ -4,7 +4,6 @@
     --pink-dark: #e84e8b;
     --pink-light: #fff0f6;
     --text: #684052;
-    --white: #ffffff;
 }
 
 * {
@@ -19,7 +18,7 @@ html {
 body {
     margin: 0;
     min-height: 100vh;
-    padding: 28px 14px;
+    padding: 24px 14px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,14 +51,14 @@ button {
 .panel {
     position: relative;
     width: 100%;
-    padding: 38px 34px;
+    padding: 36px 32px;
     overflow: hidden;
     text-align: center;
     border: 1px solid rgba(255, 255, 255, 0.9);
     border-radius: 28px;
-    background: rgba(255, 255, 255, 0.88);
-    box-shadow: 0 14px 45px rgba(202, 105, 145, 0.13);
-    animation: panel-appear 0.55s ease both;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 14px 45px rgba(202, 105, 145, 0.15);
+    animation: panel-appear 0.5s ease both;
 }
 
 .hidden {
@@ -69,7 +68,7 @@ button {
 @keyframes panel-appear {
     from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(10px);
     }
 
     to {
@@ -79,11 +78,11 @@ button {
 }
 
 .eyebrow {
-    margin: 0 0 16px;
+    margin: 0 0 15px;
     color: var(--pink-dark);
     font-size: 11px;
     font-weight: 800;
-    letter-spacing: 2.5px;
+    letter-spacing: 2.3px;
     line-height: 1.8;
 }
 
@@ -101,50 +100,47 @@ button {
 }
 
 .intro {
-    margin: 18px auto 0;
+    margin: 17px auto 0;
     max-width: 480px;
     font-size: 14px;
     line-height: 1.9;
     color: #8a6678;
 }
 
-.corner-flower {
+.decoration-one,
+.decoration-two {
     position: absolute;
     top: 12px;
-    font-size: 35px;
-    opacity: 0.8;
+    font-size: 32px;
     pointer-events: none;
 }
 
-.flower-left {
-    left: 14px;
+.decoration-one {
+    left: 13px;
     transform: rotate(-15deg);
 }
 
-.flower-right {
-    right: 14px;
+.decoration-two {
+    right: 13px;
     transform: rotate(15deg);
 }
 
 .mini-bouquet {
-    margin: 8px auto 18px;
+    margin: 10px auto 14px;
     font-size: 66px;
     line-height: 1.5;
-    filter: drop-shadow(0 5px 8px rgba(225, 110, 151, 0.12));
 }
 
 #name-form {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
     gap: 12px;
     max-width: 390px;
-    margin: 24px auto 0;
+    margin: 23px auto 0;
     text-align: left;
 }
 
 #name-form label {
-    margin-bottom: 2px;
     font-size: 13px;
     font-weight: 700;
     color: #80566b;
@@ -159,7 +155,6 @@ button {
     border: 1px solid #f3c9da;
     border-radius: 13px;
     outline: none;
-    transition: border-color 0.2s ease;
 }
 
 #recipient-input:focus {
@@ -189,7 +184,7 @@ button {
     color: white;
     background: linear-gradient(135deg, #ff8eb8, #ed5c98);
     border: none;
-    box-shadow: 0 5px 14px rgba(235, 91, 148, 0.18);
+    box-shadow: 0 5px 14px rgba(235, 91, 148, 0.2);
 }
 
 .secondary-button {
@@ -221,8 +216,8 @@ button {
 }
 
 #stage {
-    padding-top: 48px;
-    padding-bottom: 48px;
+    padding-top: 46px;
+    padding-bottom: 46px;
 }
 
 .envelope {
@@ -239,13 +234,13 @@ button {
 }
 
 #decode-button {
-    margin-top: 28px;
+    margin-top: 30px;
 }
 
-/* THIEP CHUC MUNG */
+/* THIEP */
 
 .card-panel {
-    padding-top: 34px;
+    padding-top: 32px;
     padding-bottom: 30px;
 }
 
@@ -256,7 +251,7 @@ button {
 }
 
 .card-title {
-    font-size: clamp(31px, 6vw, 43px);
+    font-size: clamp(30px, 6vw, 43px);
 }
 
 #name {
@@ -268,12 +263,12 @@ button {
     margin-top: 10px;
 }
 
-/* BO HOA LON */
+/* BO HOA */
 
 .bouquet-wrap {
     position: relative;
-    margin: 22px auto 26px;
-    padding: 12px 10px 16px;
+    margin: 24px auto 28px;
+    padding: 12px 10px 17px;
     width: min(100%, 390px);
     border: 1px solid #f9d9e5;
     border-radius: 24px;
@@ -283,22 +278,22 @@ button {
 
 .bouquet-glow {
     position: absolute;
-    width: 180px;
+    width: 190px;
     height: 150px;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
     border-radius: 50%;
     background: #ffe0ed;
-    opacity: 0.75;
+    opacity: 0.8;
 }
 
 .bouquet {
     position: relative;
     z-index: 1;
-    font-size: clamp(100px, 22vw, 145px);
+    font-size: clamp(105px, 22vw, 145px);
     line-height: 1.45;
-    filter: drop-shadow(0 8px 10px rgba(211, 97, 142, 0.14));
+    filter: drop-shadow(0 8px 10px rgba(211, 97, 142, 0.15));
     animation: bouquet-float 3.5s ease-in-out infinite;
 }
 
@@ -324,8 +319,8 @@ button {
 .messages {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-top: 20px;
+    gap: 17px;
+    margin-top: 22px;
 }
 
 .message {
@@ -340,7 +335,7 @@ button {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
-    margin: 25px 0;
+    margin: 26px 0;
 }
 
 .wishes span {
@@ -348,7 +343,7 @@ button {
     align-items: center;
     justify-content: center;
     min-height: 46px;
-    padding: 10px 12px;
+    padding: 10px;
     border: 1px solid #f8d8e5;
     border-radius: 13px;
     background: #fff6fa;
@@ -359,7 +354,7 @@ button {
 }
 
 .quote {
-    margin: 25px 0;
+    margin: 26px 0;
     padding: 20px 16px;
     color: #c74f86;
     background: #fff0f6;
@@ -375,11 +370,11 @@ button {
     margin-top: 26px;
 }
 
-/* CHU KY NGUOI GUI */
+/* CHU KY QUANG HAI */
 
 .signature-box {
-    margin: 32px auto 0;
-    padding: 22px 14px;
+    margin: 34px auto 0;
+    padding: 23px 14px;
     border-top: 1px dashed #edbfd1;
     border-bottom: 1px dashed #edbfd1;
     background: linear-gradient(135deg, #fffafd, #fff1f7);
@@ -395,7 +390,8 @@ button {
     margin: 0;
     color: #a27c8e;
     font-size: 11px;
-    letter-spacing: 1px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
 }
 
 .signature-name {
@@ -413,21 +409,21 @@ button {
     line-height: 1.8;
 }
 
-/* CAC NUT CUOI THIEP */
+/* CAC NUT */
 
 .button-group {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 14px;
-    margin-top: 32px;
+    margin-top: 34px;
 }
 
 .button-group button {
     margin-top: 4px;
 }
 
-/* HIEU UNG */
+/* LOP HIEU UNG */
 
 #star-layer,
 #effects-layer {
@@ -444,6 +440,8 @@ button {
 #effects-layer {
     z-index: 5;
 }
+
+/* SAO */
 
 .star {
     position: absolute;
@@ -467,6 +465,8 @@ button {
     }
 }
 
+/* TRAI TIM BAY */
+
 .floating-heart {
     position: absolute;
     left: var(--x);
@@ -486,7 +486,7 @@ button {
     }
 
     12% {
-        opacity: 0.9;
+        opacity: 0.95;
     }
 
     85% {
@@ -499,38 +499,85 @@ button {
     }
 }
 
+/* PHAO HOA THUONG */
+
 .firework {
     position: absolute;
     width: 1px;
     height: 1px;
+    pointer-events: none;
 }
 
-.firework-particle,
-.firework-spark {
+.firework-particle {
     position: absolute;
     top: 0;
     left: 0;
-    width: var(--particle-size, 4px);
-    height: var(--particle-size, 4px);
+    width: var(--particle-size, 5px);
+    height: var(--particle-size, 5px);
     border-radius: 50%;
     background: var(--particle-color);
-    animation: firework-pop var(--particle-duration, 1s) ease-out forwards;
+    box-shadow:
+        0 0 6px var(--particle-color),
+        0 0 13px var(--particle-color);
+    animation: firework-pop var(--particle-duration, 1.4s)
+        cubic-bezier(0.12, 0.6, 0.25, 1) forwards;
     will-change: transform, opacity;
 }
 
 @keyframes firework-pop {
     0% {
         opacity: 1;
-        transform: translate(-50%, -50%) scale(0.6);
+        transform: translate(0, 0) scale(0.6);
+    }
+
+    20% {
+        opacity: 1;
     }
 
     100% {
         opacity: 0;
-        transform: translate(var(--dx, 0), var(--dy, 0)) scale(0.2);
+        transform: translate(var(--dx), var(--dy)) scale(0.15);
     }
 }
 
-/* DIEN THOAI */
+/* PHAO HOA HINH TRAI TIM */
+
+.heart-firework-particle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: var(--particle-color);
+    font-size: var(--particle-size, 13px);
+    line-height: 1;
+    text-shadow:
+        0 0 5px var(--particle-color),
+        0 0 12px var(--particle-color);
+    animation: heart-firework-pop var(--particle-duration, 1.7s)
+        ease-out forwards;
+    will-change: transform, opacity;
+}
+
+@keyframes heart-firework-pop {
+    0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0.2);
+    }
+
+    18% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 0.9;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy)) scale(0.7);
+    }
+}
+
+/* HIEN THI TREN DIEN THOAI */
 
 @media (max-width: 600px) {
     body {
@@ -543,13 +590,13 @@ button {
     }
 
     .panel {
-        padding: 30px 19px;
+        padding: 29px 18px;
         border-radius: 23px;
     }
 
     .eyebrow {
         font-size: 10px;
-        letter-spacing: 1.8px;
+        letter-spacing: 1.7px;
     }
 
     .intro {
@@ -565,12 +612,12 @@ button {
     }
 
     .card-panel {
-        padding: 28px 17px;
+        padding: 27px 16px;
     }
 
     .bouquet-wrap {
-        margin-top: 20px;
-        margin-bottom: 23px;
+        margin-top: 21px;
+        margin-bottom: 24px;
     }
 
     .bouquet {
@@ -592,38 +639,50 @@ button {
     }
 
     .wishes span {
-        padding: 9px 7px;
+        padding: 9px 6px;
         font-size: 10px;
     }
 
     .button-group {
         flex-direction: column;
-        gap: 12px;
-        margin-top: 30px;
+        gap: 13px;
+        margin-top: 32px;
     }
 
     .button-group button {
         width: 100%;
-        min-height: 48px;
+        min-height: 49px;
         margin-top: 0;
     }
 
     .signature-name {
-        font-size: 33px;
+        font-size: 34px;
     }
 
-    .corner-flower {
+    .decoration-one,
+    .decoration-two {
         font-size: 27px;
+    }
+
+    .firework-particle {
+        box-shadow:
+            0 0 9px var(--particle-color),
+            0 0 18px var(--particle-color);
+    }
+
+    .heart-firework-particle {
+        text-shadow:
+            0 0 7px var(--particle-color),
+            0 0 14px var(--particle-color);
     }
 }
 
-/* Giam chuyen dong neu thiet bi yeu hoac nguoi dung chon giam hieu ung */
+/* GIAM HIEU UNG KHI NGUOI DUNG CHON REDUCED MOTION */
 
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
-        scroll-behavior: auto !important;
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;

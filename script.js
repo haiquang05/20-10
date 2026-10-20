@@ -43,39 +43,48 @@ const reduceMotion = window.matchMedia(
 const MAX_FIREWORKS = isMobile ? 2 : 3;
 
 const HEART_COLORS = [
-    "#ff8fbd",
-    "#ffc1dd",
-    "#ffe3f0",
-    "#ff6fae",
-    "#e8a6ff",
-    "#ffd166"
+    "#ff1744",
+    "#ff4081",
+    "#ff80ab",
+    "#e040fb",
+    "#ea80fc",
+    "#ffd740",
+    "#ff9100",
+    "#ffffff"
 ];
 
 const FIREWORK_COLORS = [
-    "#ff8fbd",
-    "#ffd166",
+    "#ff1744",
+    "#ff4081",
+    "#ff80ab",
+    "#ff9100",
+    "#ffea00",
+    "#76ff03",
+    "#00e5ff",
+    "#2979ff",
+    "#7c4dff",
     "#ffffff",
-    "#ff5da2",
-    "#c9a0ff",
-    "#ffb3c6"
+    "#ff6d00",
+    "#f500ff"
 ];
 
 
-/* THAY TEN NGUOI NHAN TRONG CAC LOI CHUC */
+/* THAY TEN TRONG CAC LOI CHUC */
 function personalizeCard(name) {
     recipientName.textContent = name;
 
-    const templateElements = cardScreen.querySelectorAll("[data-template]");
+    const elements = cardScreen.querySelectorAll("[data-template]");
 
-    templateElements.forEach((element) => {
-        const template = element.dataset.template;
-
-        element.textContent = template.replace(/\{\{ten\}\}/g, name);
+    elements.forEach((element) => {
+        element.textContent = element.dataset.template.replace(
+            /\{\{ten\}\}/g,
+            name
+        );
     });
 }
 
 
-/* QUAN LY CAC HIEU UNG DE TRANH TON TAI NGUYEN */
+/* QUAN LY HIEU UNG */
 function scheduleEffect(callback, delay, currentSession = sessionId) {
     const timer = window.setTimeout(() => {
         effectTimers = effectTimers.filter((id) => id !== timer);
@@ -110,7 +119,7 @@ function clearEffects() {
 }
 
 
-/* TAO CAC NGÔI SAO NHO */
+/* TAO SAO */
 function createStars() {
     if (!starLayer || reduceMotion) return;
 
@@ -132,7 +141,7 @@ function createStars() {
 }
 
 
-/* NHAP TEN VA MO MAN HINH THIEP */
+/* NHAP TEN NGUOI NHAN */
 nameForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -144,11 +153,10 @@ nameForm.addEventListener("submit", (event) => {
     }
 
     clearEffects();
-
     personalizeCard(enteredName);
 
     line1.textContent = CFG.line1;
-    line2.textContent = CFG.line2;
+    line2.textContent = `${CFG.line2.replace("bạn", enteredName)}`;
 
     nameScreen.classList.add("hidden");
     cardScreen.classList.add("hidden");
@@ -158,7 +166,7 @@ nameForm.addEventListener("submit", (event) => {
 });
 
 
-/* MO NOI DUNG LOI CHUC */
+/* MO LOI CHUC */
 decodeButton.addEventListener("click", () => {
     if (cardShown) return;
 
@@ -168,13 +176,15 @@ decodeButton.addEventListener("click", () => {
     cardScreen.classList.remove("hidden");
 
     createHeartBurst(isMobile ? 6 : 9);
+
+    // Tao mot dot phao hoa khi mo thiep
+    launchFireworks();
 });
 
 
-/* TAO MOT TRAI TIM BAY */
+/* TAO TRAI TIM BAY */
 function createHeart() {
     if (!effectsLayer || !cardShown || reduceMotion) return;
-
     if (activeHearts >= CFG.maxHearts) return;
 
     activeHearts++;
@@ -182,7 +192,7 @@ function createHeart() {
     const heart = document.createElement("span");
 
     heart.className = "floating-heart";
-    heart.textContent = Math.random() > 0.22 ? "♥" : "♡";
+    heart.textContent = Math.random() > 0.2 ? "♥" : "♡";
     heart.setAttribute("aria-hidden", "true");
 
     const size = 18 + Math.random() * (isMobile ? 13 : 20);
@@ -215,21 +225,19 @@ function createHeart() {
     }
 
     heart.addEventListener("animationend", removeHeart, { once: true });
-
     effectsLayer.appendChild(heart);
 
     scheduleEffect(removeHeart, (duration + 1) * 1000, currentSession);
 }
 
 
-/* TAO MOT DOT TRAI TIM */
+/* TAO DOT TRAI TIM */
 function createHeartBurst(count = 8) {
     if (!cardShown || reduceMotion) return;
 
     const now = Date.now();
 
-    // Han che bam lien tuc de tranh lag
-    if (now - lastBurstTime < 1200) return;
+    if (now - lastBurstTime < 1000) return;
 
     lastBurstTime = now;
 
@@ -245,12 +253,13 @@ function createHeartBurst(count = 8) {
 }
 
 
-/* TAO MOT PHÁO HOA NHO */
-function createFirework(x, y) {
+/* TAO PHAO HOA */
+function createFirework(x, y, heartShape = false) {
     if (!effectsLayer || !cardShown || reduceMotion) return;
 
     const existing = effectsLayer.querySelectorAll(".firework");
 
+    // Gioi han so cum phao hoa de tranh lag
     if (existing.length >= MAX_FIREWORKS) {
         existing[0].remove();
     }
@@ -261,33 +270,70 @@ function createFirework(x, y) {
     firework.style.top = `${y}%`;
 
     const fragment = document.createDocumentFragment();
-    const particleCount = isMobile ? 12 : 18;
+
+    const particleCount = isMobile
+        ? (heartShape ? 32 : 42)
+        : (heartShape ? 48 : 60);
+
+    const radius = isMobile ? 95 : 140;
 
     for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement("span");
-
-        particle.className = "firework-particle";
-
-        const angle = (Math.PI * 2 * i) / particleCount;
-        const distance = isMobile
-            ? 30 + Math.random() * 35
-            : 40 + Math.random() * 50;
-
-        const dx = Math.cos(angle) * distance;
-        const dy = Math.sin(angle) * distance;
 
         const color =
             FIREWORK_COLORS[
                 Math.floor(Math.random() * FIREWORK_COLORS.length)
             ];
 
-        particle.style.setProperty("--dx", `${dx}px`);
-        particle.style.setProperty("--dy", `${dy}px`);
         particle.style.setProperty("--particle-color", color);
         particle.style.setProperty(
             "--particle-duration",
-            `${0.8 + Math.random() * 0.3}s`
+            `${1.2 + Math.random() * 0.65}s`
         );
+
+        if (heartShape) {
+            particle.className = "heart-firework-particle";
+            particle.textContent = "♥";
+
+            // Cong thuc toa do tao hinh trai tim
+            const t = (Math.PI * 2 * i) / particleCount;
+
+            const hx = 16 * Math.pow(Math.sin(t), 3);
+            const hy =
+                13 * Math.cos(t) -
+                5 * Math.cos(2 * t) -
+                2 * Math.cos(3 * t) -
+                Math.cos(4 * t);
+
+            const scale = radius / 18;
+
+            particle.style.setProperty("--dx", `${hx * scale}px`);
+            particle.style.setProperty("--dy", `${-hy * scale}px`);
+            particle.style.setProperty(
+                "--particle-size",
+                `${isMobile ? 10 : 13}px`
+            );
+        } else {
+            particle.className = "firework-particle";
+
+            const angle = (Math.PI * 2 * i) / particleCount;
+            const distance = radius * (0.55 + Math.random() * 0.65);
+
+            particle.style.setProperty(
+                "--dx",
+                `${Math.cos(angle) * distance}px`
+            );
+
+            particle.style.setProperty(
+                "--dy",
+                `${Math.sin(angle) * distance}px`
+            );
+
+            particle.style.setProperty(
+                "--particle-size",
+                `${isMobile ? 4 : 5}px`
+            );
+        }
 
         fragment.appendChild(particle);
     }
@@ -299,11 +345,11 @@ function createFirework(x, y) {
 
     scheduleEffect(() => {
         firework.remove();
-    }, 1400, currentSession);
+    }, 2200, currentSession);
 }
 
 
-/* BAN PHÁO HOA */
+/* BAN PHAO HOA NHIEU MAU VA PHAO HOA TRAI TIM */
 function launchFireworks() {
     if (!cardShown || reduceMotion) return;
 
@@ -311,21 +357,26 @@ function launchFireworks() {
 
     const positions = isMobile
         ? [
-            { x: 22 + Math.random() * 10, y: 22 + Math.random() * 12 },
-            { x: 68 + Math.random() * 8, y: 28 + Math.random() * 10 }
+            { x: 22, y: 27, heart: true },
+            { x: 77, y: 33, heart: false },
+            { x: 49, y: 19, heart: true }
         ]
         : [
-            { x: 20 + Math.random() * 10, y: 24 + Math.random() * 15 },
-            { x: 68 + Math.random() * 10, y: 22 + Math.random() * 15 },
-            { x: 42 + Math.random() * 16, y: 16 + Math.random() * 12 }
+            { x: 18, y: 27, heart: false },
+            { x: 78, y: 29, heart: true },
+            { x: 49, y: 18, heart: false }
         ];
 
     positions.forEach((position, index) => {
         scheduleEffect(() => {
-            if (cardShown) {
-                createFirework(position.x, position.y);
-            }
-        }, index * 300, currentSession);
+            if (!cardShown) return;
+
+            createFirework(
+                position.x + (Math.random() * 8 - 4),
+                position.y + (Math.random() * 8 - 4),
+                position.heart
+            );
+        }, index * 450, currentSession);
     });
 }
 
@@ -348,11 +399,11 @@ moreHeartsButton.addEventListener("click", () => {
             moreHeartsButton.textContent = "Thêm yêu thương ♥";
             moreHeartsButton.disabled = false;
         }
-    }, 2200, currentSession);
+    }, 2500, currentSession);
 });
 
 
-/* QUAY LAI DOI TEN NGUOI NHAN */
+/* DOI TEN NGUOI NHAN */
 backButton.addEventListener("click", () => {
     cardShown = false;
 
