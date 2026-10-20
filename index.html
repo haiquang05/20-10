@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#250d28">
+    <title>Gửi Em Yêu Thương ❤️</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="background-glow"></div>
+    <div id="star-layer" class="star-layer" aria-hidden="true"></div>
+    <div id="effects-layer" class="effects-layer" aria-hidden="true"></div>
+
+    <main class="app">
+        <!-- Man hinh nhap ten -->
+        <section id="name-screen" class="panel name-screen">
+            <div class="tiny-heart">♥</div>
+            <p class="eyebrow">A LITTLE SURPRISE FOR YOU</p>
+            <h1>Một chút yêu thương</h1>
+            <p class="intro">
+                Có một tấm thiệp nhỏ đang chờ được gửi đến người đặc biệt.
+            </p>
+
+            <form id="name-form">
+                <label for="recipient-input">Tên người nhận là gì nhỉ?</label>
+                <input
+                    id="recipient-input"
+                    type="text"
+                    placeholder="Nhập tên người ấy..."
+                    maxlength="40"
+                    autocomplete="off"
+                    required
+                >
+                <button class="primary-button" type="submit">
+                    Mở món quà <span>♡</span>
+                </button>
+            </form>
+
+            <p class="small-note">Được tạo bằng tất cả sự chân thành ♥</p>
+        </section>
+
+        <!-- Man hinh mo loi nhan -->
+        <section id="stage" class="panel stage hidden">
+            <p class="eyebrow">A MESSAGE FROM MY HEART</p>
+            <div class="envelope" aria-hidden="true">
+                <div class="envelope-back"></div>
+                <div class="envelope-letter">
+                    <span>♥</span>
+                </div>
+                <div class="envelope-flap"></div>
+                <div class="envelope-front"></div>
+            </div>
+
+            <div class="letter-preview">
+                <p id="l1" class="letter-line"></p>
+                <p id="l2" class="letter-line letter-line-second"></p>
+            </div>
+
+            <button id="decode-button" class="primary-button" type="button">
+                Đọc lời nhắn <span>♡</span>
+            </button>
+        </section>
+
+        <!-- Noi dung thiep -->
+        <section id="card-screen" class="panel card-screen hidden">
+            <div class="card-decoration decoration-one">✦</div>
+            <div class="card-decoration decoration-two">✧</div>
+
+            <p class="eyebrow">A LITTLE LETTER FOR YOU</p>
+            <div class="card-heart" aria-hidden="true">♥</div>
+
+            <p class="to-line">Gửi đến</p>
+            <h2 id="name">Người đặc biệt</h2>
+
+            <div class="ornament"><span>♡</span></div>
+
+            <div id="message" class="message">
+                <p>Nhân ngày 20/10, chúc em luôn vui vẻ, bình an và hạnh phúc.</p>
+                <p>Mong rằng mỗi ngày của em đều có những điều nhỏ bé khiến em mỉm cười, luôn được yêu thương và luôn tự tin tỏa sáng theo cách riêng của mình.</p>
+                <p>Cảm ơn em vì đã làm cho thế giới này trở nên dịu dàng hơn. Chúc em có một ngày thật ngọt ngào và đáng nhớ nhé!</p>
+            </div>
+
+            <div id="wishes" class="wishes">
+                <span>Luôn xinh đẹp</span>
+                <span>Luôn hạnh phúc</span>
+                <span>Luôn được yêu thương</span>
+            </div>
+
+            <p id="quote" class="quote">
+                “Điều dịu dàng nhất là nhìn thấy em mỉm cười.”
+            </p>
+
+            <div class="signature-block">
+                <p class="sign-label">Thân gửi,</p>
+                <p id="sign" class="signature">Người luôn mong em vui</p>
+            </div>
+
+            <div class="button-group">
+                <button id="more-hearts" class="primary-button" type="button">
+                    Thêm yêu thương <span>♥</span>
+                </button>
+                <button id="back-button" class="secondary-button" type="button">
+                    Viết lại tên
+                </button>
+            </div>
+
+            <p class="footer-note">Made with love · 20/10</p>
+        </section>
+    </main>
+</body>
+</html>
