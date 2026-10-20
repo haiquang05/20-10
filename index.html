@@ -4,149 +4,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#ffe4ef">
-    <title>Thiệp chúc mừng 20/10 💗</title>
-
+    <meta name="theme-color" content="#ffe6ef">
+    <title>Thiệp chúc mừng 20/10</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Lora:ital,wght@0,500;0,700;1,400&display=swap&subset=vietnamese" rel="stylesheet">
     <script src="script.js" defer></script>
 </head>
-
 <body>
     <div id="star-layer" aria-hidden="true"></div>
     <div id="effects-layer" aria-hidden="true"></div>
 
-    <main class="app">
-
-        <!-- MAN HINH NHAP TEN -->
+    <main class="page">
+        <!-- Man hinh nhap ten -->
         <section id="name-screen" class="panel">
-            <div class="decoration-one" aria-hidden="true">🌷</div>
-            <div class="decoration-two" aria-hidden="true">💗</div>
-
-            <p class="eyebrow">A LITTLE GIFT FOR YOU</p>
-
-            <h1 class="main-title">Gửi một chút yêu thương</h1>
-
+            <div class="bouquet" aria-hidden="true">💐</div>
+            <p class="eyebrow">20 THÁNG 10 · NGÀY PHỤ NỮ VIỆT NAM</p>
+            <h1>Một món quà nhỏ<br>dành cho bạn</h1>
             <p class="intro">
-                Một tấm thiệp nhỏ cùng những lời chúc chân thành,
-                dành riêng cho một người đặc biệt.
+                Hãy nhập tên người đặc biệt để mở món quà nhé!
             </p>
-
-            <div class="mini-bouquet" aria-hidden="true">💐</div>
 
             <form id="name-form">
                 <label for="recipient-input">Tên người nhận</label>
-
                 <input
                     id="recipient-input"
                     name="recipient"
                     type="text"
-                    placeholder="Nhập tên người nhận..."
-                    maxlength="40"
-                    autocomplete="off"
+                    placeholder="Ví dụ: Phương Anh"
+                    maxlength="50"
+                    autocomplete="name"
                     required
                 >
-
-                <button type="submit" class="primary-button">
-                    Mở món quà 💌
+                <p id="input-error" class="error" aria-live="polite"></p>
+                <button class="primary-button" type="submit">
+                    Mở thiệp yêu thương 💌
                 </button>
             </form>
 
-            <p class="small-note">
-                Một món quà nhỏ từ Quang Hải 💗
-            </p>
+            <p class="signature-small">Gửi bằng tất cả sự chân thành ♡</p>
         </section>
 
-
-        <!-- MAN HINH MO THIEP -->
+        <!-- Man hinh truoc khi mo thiep -->
         <section id="stage" class="panel hidden">
-            <p class="eyebrow">A MESSAGE JUST FOR YOU</p>
-
-            <div class="envelope" aria-hidden="true">💌</div>
-
-            <h2 id="l1">Có một điều nhỏ bé</h2>
-
-            <p id="l2" class="intro">muốn gửi đến bạn...</p>
-
+            <div class="stage-heart" aria-hidden="true">♡</div>
+            <p class="eyebrow">MÓN QUÀ DÀNH RIÊNG CHO</p>
+            <h2 id="l1">Một người đặc biệt</h2>
+            <p id="l2">Có một lời chúc đang chờ bạn...</p>
             <button id="decode-button" class="primary-button" type="button">
-                Mở lời chúc 💖
+                Nhận lời chúc ✨
             </button>
         </section>
 
-
-        <!-- NOI DUNG THIEP -->
+        <!-- Noi dung thiep -->
         <section id="card-screen" class="panel card-panel hidden">
-            <p class="eyebrow">HAPPY VIETNAMESE WOMEN'S DAY</p>
+            <div class="card-top">
+                <span class="flower flower-left" aria-hidden="true">🌷</span>
+                <span class="flower flower-right" aria-hidden="true">🌸</span>
 
-            <div class="card-flower" aria-hidden="true">🌸 🌷 🌸</div>
-
-            <h1 class="card-title">
-                Chúc mừng 20/10, <span id="name">bạn</span>!
-            </h1>
-
-            <p class="intro card-intro">
-                Gửi đến bạn những điều ngọt ngào nhất.
-            </p>
-
-            <!-- BO HOA -->
-            <div class="bouquet-wrap">
-                <div class="bouquet-glow"></div>
-                <div class="bouquet" aria-label="Bó hoa tươi thắm">💐</div>
-                <div class="bouquet-caption">Một bó hoa thay lời muốn nói</div>
-            </div>
-
-            <!-- CAC LOI CHUC DUOC THAY TEN TU DONG -->
-            <div class="messages">
-                <p class="message" data-template="Chúc {{ten}} có một ngày 20/10 thật hạnh phúc, ngập tràn tiếng cười và những điều ngọt ngào."></p>
-
-                <p class="message" data-template="Mong {{ten}} luôn xinh đẹp, tự tin, mạnh mẽ và đạt được những điều mà {{ten}} đang ấp ủ."></p>
-
-                <p class="message" data-template="Chúc {{ten}} luôn gặp nhiều may mắn, có thật nhiều sức khỏe và luôn được trân trọng bằng sự chân thành."></p>
-
-                <p class="message" data-template="Hy vọng mỗi ngày của {{ten}} đều có một lý do để mỉm cười, những người tốt ở bên cạnh và thật nhiều kỷ niệm đẹp."></p>
-
-                <p class="message" data-template="Chúc {{ten}} luôn giữ được sự rạng rỡ của riêng mình và không ngừng tiến gần hơn đến những ước mơ."></p>
-            </div>
-
-            <div class="wishes">
-                <span data-template="💗 Chúc {{ten}} hạnh phúc"></span>
-                <span data-template="🌷 Chúc {{ten}} luôn rạng rỡ"></span>
-                <span data-template="✨ Chúc {{ten}} thành công"></span>
-                <span data-template="🍀 Chúc {{ten}} gặp nhiều may mắn"></span>
-            </div>
-
-            <blockquote class="quote" data-template="{{ten}} xứng đáng với tất cả những điều tốt đẹp nhất! 💕"></blockquote>
-
-            <p class="message final-message" data-template="Mong rằng không chỉ ngày 20/10 mà cả những ngày bình thường sau này, {{ten}} cũng luôn có thật nhiều niềm vui, bình yên và yêu thương."></p>
-
-            <!-- NGUOI GUI -->
-            <div class="signature-box">
-                <div class="signature-flower" aria-hidden="true">🌷</div>
-                <p class="signature-label">NGƯỜI GỬI LỜI CHÚC</p>
-                <p class="signature-name">Quang Hải 💗</p>
-                <p class="signature-note">
-                    Thân gửi bằng tất cả sự chân thành
+                <p class="eyebrow">HAPPY VIETNAMESE WOMEN'S DAY</p>
+                <div class="big-heart" aria-hidden="true">♥</div>
+                <h1>Chúc mừng<br>ngày 20/10</h1>
+                <p class="recipient-line">
+                    Thân gửi <span id="name">bạn</span> 💗
                 </p>
             </div>
 
-            <div class="button-group">
-                <button id="more-hearts" class="primary-button" type="button">
-                    Thêm yêu thương ♥
-                </button>
+            <div class="card-divider"><span>✦</span></div>
 
-                <button id="back-button" class="secondary-button" type="button">
-                    Đổi tên người nhận ↩
-                </button>
+            <div class="message-content">
+                <p id="message">
+                    Chúc bạn có một ngày 20/10 thật vui vẻ.
+                </p>
+
+                <div class="wish-list">
+                    <p data-template="Chúc {{ten}} luôn rạng rỡ, tự tin và yêu thương chính mình.">
+                        Chúc bạn luôn rạng rỡ, tự tin và yêu thương chính mình.
+                    </p>
+                    <p data-template="Mong mỗi ngày của {{ten}} đều có thật nhiều niềm vui và những điều bất ngờ ngọt ngào.">
+                        Mong mỗi ngày của bạn đều có thật nhiều niềm vui.
+                    </p>
+                    <p data-template="Chúc mọi ước mơ của {{ten}} dần trở thành hiện thực.">
+                        Chúc mọi ước mơ của bạn dần trở thành hiện thực.
+                    </p>
+                </div>
+
+                <p class="quote">
+                    Hãy luôn là phiên bản rực rỡ nhất của chính mình. 🌷
+                </p>
+
+                <div class="sender">
+                    <span>Thân mến,</span>
+                    <strong>Quang Hải ♥</strong>
+                </div>
             </div>
 
-            <p class="small-note">
-                Một bó hoa và thật nhiều lời chúc từ Quang Hải 🌷
-            </p>
+            <div class="card-actions">
+                <button id="more-hearts" class="secondary-button" type="button">
+                    Thêm yêu thương 💖
+                </button>
+                <button id="back-button" class="text-button" type="button">
+                    ← Quay lại
+                </button>
+            </div>
         </section>
-
     </main>
+
+    <footer>Made with ♡ by Quang Hải</footer>
 </body>
 </html>

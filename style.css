@@ -1,9 +1,14 @@
-
 :root {
-    --pink: #ff75a8;
-    --pink-dark: #e84e8b;
-    --pink-light: #fff0f6;
-    --text: #684052;
+    --pink: #f06b9a;
+    --pink-dark: #bd426f;
+    --pink-light: #fff0f5;
+    --cream: #fffaf7;
+    --text: #67394d;
+    --muted: #956a7c;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    --font-body: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif;
+    --font-serif: "Lora", "Times New Roman", serif;
 }
 
 * {
@@ -12,23 +17,21 @@
 
 html {
     min-height: 100%;
-    -webkit-text-size-adjust: 100%;
+    background: #ffe6ef;
 }
 
 body {
     margin: 0;
     min-height: 100vh;
-    padding: 24px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow-x: hidden;
-    font-family: "Montserrat", sans-serif;
+    font-family: var(--font-body);
     color: var(--text);
     background:
-        radial-gradient(ellipse at 15% 15%, #ffe0eb 0, transparent 38%),
-        radial-gradient(ellipse at 85% 80%, #f8dfff 0, transparent 35%),
-        linear-gradient(135deg, #fff8fb, #ffeaf2 55%, #fff4fa);
+        radial-gradient(circle at 15% 15%, #fff9fb 0, transparent 28%),
+        radial-gradient(circle at 85% 75%, #ffd0e0 0, transparent 30%),
+        linear-gradient(135deg, #ffeaf2, #fff6f8 50%, #ffdfeb);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
 button,
@@ -40,397 +43,419 @@ button {
     -webkit-tap-highlight-color: transparent;
 }
 
-.app {
-    width: 100%;
-    max-width: 680px;
-    margin: auto;
-    position: relative;
-    z-index: 2;
-}
-
-.panel {
-    position: relative;
-    width: 100%;
-    padding: 36px 32px;
-    overflow: hidden;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    border-radius: 28px;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 14px 45px rgba(202, 105, 145, 0.15);
-    animation: panel-appear 0.5s ease both;
-}
-
 .hidden {
     display: none !important;
 }
 
-@keyframes panel-appear {
+.page {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: calc(100vh - 48px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 16px;
+}
+
+/* ========== PANEL VÀ CHUYỂN MÀN HÌNH ========== */
+.panel {
+    position: relative;
+    width: min(100%, 560px);
+    padding: clamp(24px, 6vw, 44px);
+    text-align: center;
+    background: rgb(255 250 252 / 94%);
+    border: 1px solid rgb(255 255 255 / 90%);
+    border-radius: 28px;
+    box-shadow: 0 18px 55px rgb(174 75 117 / 15%);
+    animation: panel-in 700ms var(--ease) both;
+}
+
+.panel.leaving {
+    pointer-events: none;
+    animation: panel-out 300ms ease-in both;
+}
+
+@keyframes panel-in {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translate3d(0, 18px, 0) scale(.98);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translate3d(0, 0, 0) scale(1);
     }
 }
 
+@keyframes panel-out {
+    from {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate3d(0, -12px, 0) scale(.98);
+    }
+}
+
+.bouquet {
+    font-size: clamp(56px, 13vw, 78px);
+    line-height: 1.2;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 7px 10px rgb(181 76 120 / 15%));
+    animation: float-soft 4s ease-in-out infinite;
+}
+
+@keyframes float-soft {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -6px, 0); }
+}
+
 .eyebrow {
-    margin: 0 0 15px;
     color: var(--pink-dark);
     font-size: 11px;
     font-weight: 800;
-    letter-spacing: 2.3px;
+    letter-spacing: 2px;
     line-height: 1.8;
 }
 
-.main-title,
-.card-title {
-    margin: 0;
-    color: #d94e88;
-    font-family: "Dancing Script", cursive;
-    font-weight: 700;
+h1,
+h2 {
+    color: var(--pink-dark);
     line-height: 1.3;
 }
 
-.main-title {
-    font-size: clamp(32px, 6vw, 46px);
+h1 {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: clamp(30px, 7vw, 43px);
+    margin: 16px 0;
 }
 
-.intro {
-    margin: 17px auto 0;
-    max-width: 480px;
-    font-size: 14px;
-    line-height: 1.9;
-    color: #8a6678;
+h2 {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: clamp(28px, 7vw, 38px);
+    margin: 14px 0;
 }
 
-.decoration-one,
-.decoration-two {
-    position: absolute;
-    top: 12px;
-    font-size: 32px;
-    pointer-events: none;
+.intro,
+#l2 {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.8;
 }
 
-.decoration-one {
-    left: 13px;
-    transform: rotate(-15deg);
-}
-
-.decoration-two {
-    right: 13px;
-    transform: rotate(15deg);
-}
-
-.mini-bouquet {
-    margin: 10px auto 14px;
-    font-size: 66px;
-    line-height: 1.5;
-}
-
+/* ========== FORM ========== */
 #name-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 390px;
-    margin: 23px auto 0;
+    margin-top: 28px;
     text-align: left;
 }
 
 #name-form label {
-    font-size: 13px;
+    display: block;
+    margin-bottom: 8px;
+    color: var(--pink-dark);
     font-weight: 700;
-    color: #80566b;
+    font-size: 14px;
 }
 
 #recipient-input {
+    display: block;
     width: 100%;
     min-height: 50px;
-    padding: 13px 16px;
-    color: #684052;
-    background: #fffafd;
-    border: 1px solid #f3c9da;
-    border-radius: 13px;
+    padding: 13px 15px;
+    border: 1px solid #f0bed0;
+    border-radius: 14px;
     outline: none;
+    color: var(--text);
+    background: white;
+    transition:
+        border-color 250ms var(--ease),
+        box-shadow 250ms var(--ease),
+        transform 250ms var(--ease);
 }
 
 #recipient-input:focus {
     border-color: var(--pink);
+    box-shadow: 0 0 0 4px rgb(240 107 154 / 13%);
+    transform: translate3d(0, -1px, 0);
 }
 
-#recipient-input::placeholder {
-    color: #c3a2b1;
+.error {
+    min-height: 18px;
+    margin: 6px 0 0;
+    color: #b72d52;
+    font-size: 13px;
 }
 
+/* ========== NÚT ========== */
 .primary-button,
 .secondary-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     min-height: 48px;
-    padding: 13px 22px;
-    border-radius: 14px;
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 1.5;
+    padding: 13px 20px;
+    border: 0;
+    border-radius: 999px;
     cursor: pointer;
-    transition: transform 0.18s ease, background 0.18s ease;
+    font-weight: 700;
+    transition:
+        transform 300ms var(--ease),
+        box-shadow 300ms var(--ease),
+        filter 300ms var(--ease);
 }
 
 .primary-button {
+    width: 100%;
+    margin-top: 12px;
     color: white;
-    background: linear-gradient(135deg, #ff8eb8, #ed5c98);
-    border: none;
-    box-shadow: 0 5px 14px rgba(235, 91, 148, 0.2);
+    background: linear-gradient(135deg, #f47eaa, #dc568a);
+    box-shadow: 0 8px 18px rgb(220 86 138 / 23%);
 }
 
-.secondary-button {
-    color: #bc4e7b;
-    background: #fff4f8;
-    border: 1px solid #f4cada;
-}
+@media (hover: hover) {
+    .primary-button:hover,
+    .secondary-button:hover {
+        transform: translate3d(0, -2px, 0);
+        box-shadow: 0 12px 24px rgb(220 86 138 / 28%);
+        filter: brightness(1.05);
+    }
 
-.primary-button:hover,
-.secondary-button:hover {
-    transform: translateY(-2px);
+    .text-button:hover {
+        color: var(--pink-dark);
+    }
 }
 
 .primary-button:active,
 .secondary-button:active {
-    transform: scale(0.98);
+    transform: scale(.97);
+    transition-duration: 100ms;
 }
 
-.primary-button:disabled {
-    opacity: 0.8;
-    cursor: wait;
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.text-button:focus-visible {
+    outline: 3px solid rgb(240 107 154 / 45%);
+    outline-offset: 3px;
 }
 
-.small-note {
-    margin: 24px 0 0;
-    color: #b28a9c;
-    font-size: 11px;
-    line-height: 1.8;
+.signature-small {
+    margin: 25px 0 0;
+    color: #b17d93;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 13px;
 }
 
-#stage {
-    padding-top: 46px;
-    padding-bottom: 46px;
+/* ========== MÀN HÌNH TRƯỚC KHI MỞ THIỆP ========== */
+.stage-heart {
+    color: var(--pink);
+    font-size: 70px;
+    animation: heart-beat 1.5s ease-in-out infinite;
+    will-change: transform;
 }
 
-.envelope {
-    margin: 14px 0 20px;
-    font-size: 76px;
-    line-height: 1.4;
-}
-
-#stage h2 {
-    margin: 0;
-    color: #d94e88;
-    font-family: "Dancing Script", cursive;
-    font-size: clamp(30px, 6vw, 42px);
+@keyframes heart-beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
 }
 
 #decode-button {
-    margin-top: 30px;
-}
-
-/* THIEP */
-
-.card-panel {
-    padding-top: 32px;
-    padding-bottom: 30px;
-}
-
-.card-flower {
-    margin: 4px 0 12px;
-    font-size: 28px;
-    letter-spacing: 5px;
-}
-
-.card-title {
-    font-size: clamp(30px, 6vw, 43px);
-}
-
-#name {
-    color: #e34f8d;
-    overflow-wrap: anywhere;
-}
-
-.card-intro {
-    margin-top: 10px;
-}
-
-/* BO HOA */
-
-.bouquet-wrap {
-    position: relative;
-    margin: 24px auto 28px;
-    padding: 12px 10px 17px;
-    width: min(100%, 390px);
-    border: 1px solid #f9d9e5;
-    border-radius: 24px;
-    background: linear-gradient(145deg, #fff7fb, #fff0f6);
-    overflow: hidden;
-}
-
-.bouquet-glow {
-    position: absolute;
-    width: 190px;
-    height: 150px;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 50%;
-    background: #ffe0ed;
-    opacity: 0.8;
-}
-
-.bouquet {
-    position: relative;
-    z-index: 1;
-    font-size: clamp(105px, 22vw, 145px);
-    line-height: 1.45;
-    filter: drop-shadow(0 8px 10px rgba(211, 97, 142, 0.15));
-    animation: bouquet-float 3.5s ease-in-out infinite;
-}
-
-@keyframes bouquet-float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-5px);
-    }
-}
-
-.bouquet-caption {
-    position: relative;
-    z-index: 1;
-    color: #c66b91;
-    font-family: "Dancing Script", cursive;
-    font-size: 23px;
-    font-weight: 600;
-}
-
-.messages {
-    display: flex;
-    flex-direction: column;
-    gap: 17px;
     margin-top: 22px;
 }
 
-.message {
-    margin: 0;
-    font-size: 13px;
-    line-height: 2;
-    color: #79566a;
-    overflow-wrap: anywhere;
+/* ========== THIỆP ========== */
+.card-panel {
+    overflow: hidden;
+    padding: 0;
 }
 
-.wishes {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    margin: 26px 0;
+.card-top {
+    position: relative;
+    padding: 35px 24px 24px;
+    background: linear-gradient(145deg, #ffe1ec, #fff3f7);
 }
 
-.wishes span {
+.card-top .eyebrow {
+    margin-top: 0;
+    font-size: 10px;
+}
+
+.big-heart {
+    color: #ed6698;
+    font-size: 54px;
+    line-height: 1.2;
+    text-shadow: 0 7px 15px rgb(220 86 138 / 20%);
+    animation: heart-beat 1.8s ease-in-out infinite;
+    will-change: transform;
+}
+
+.card-top h1 {
+    margin: 12px 0;
+    font-size: clamp(32px, 7vw, 43px);
+}
+
+.recipient-line {
+    margin: 12px 0 0;
+    color: var(--pink-dark);
+    font-family: var(--font-serif);
+    font-size: 19px;
+}
+
+#name {
+    font-weight: 700;
+}
+
+.flower {
+    position: absolute;
+    top: 20px;
+    font-size: 27px;
+    animation: float-soft 3.5s ease-in-out infinite;
+}
+
+.flower-left {
+    left: 20px;
+}
+
+.flower-right {
+    right: 20px;
+    animation-delay: -1.7s;
+}
+
+.card-divider {
     display: flex;
     align-items: center;
-    justify-content: center;
-    min-height: 46px;
-    padding: 10px;
-    border: 1px solid #f8d8e5;
+    gap: 14px;
+    padding: 0 30px;
+    color: #e78aaa;
+}
+
+.card-divider::before,
+.card-divider::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: #f4c7d7;
+}
+
+.message-content {
+    padding: 12px clamp(22px, 6vw, 42px) 26px;
+    font-size: 15px;
+    line-height: 1.85;
+}
+
+#message {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.wish-list p {
+    position: relative;
+    margin: 14px 0;
+    padding: 12px 14px;
+    text-align: left;
     border-radius: 13px;
-    background: #fff6fa;
-    color: #b84e7c;
-    font-size: 11px;
-    line-height: 1.7;
-    overflow-wrap: anywhere;
+    background: #fff1f6;
+}
+
+.wish-list p::before {
+    content: "♥";
+    margin-right: 8px;
+    color: var(--pink);
+    font-weight: 800;
+}
+
+/* Hiện lần lượt từng phần khi thiệp mở ra */
+#card-screen:not(.hidden):not(.leaving) .wish-list p,
+#card-screen:not(.hidden):not(.leaving) #message,
+#card-screen:not(.hidden):not(.leaving) .quote,
+#card-screen:not(.hidden):not(.leaving) .sender {
+    animation: item-in 700ms var(--ease) both;
+}
+
+#card-screen:not(.hidden):not(.leaving) #message { animation-delay: 250ms; }
+#card-screen:not(.hidden):not(.leaving) .wish-list p:nth-child(1) { animation-delay: 400ms; }
+#card-screen:not(.hidden):not(.leaving) .wish-list p:nth-child(2) { animation-delay: 550ms; }
+#card-screen:not(.hidden):not(.leaving) .wish-list p:nth-child(3) { animation-delay: 700ms; }
+#card-screen:not(.hidden):not(.leaving) .quote { animation-delay: 850ms; }
+#card-screen:not(.hidden):not(.leaving) .sender { animation-delay: 1000ms; }
+
+@keyframes item-in {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 14px, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
 }
 
 .quote {
-    margin: 26px 0;
-    padding: 20px 16px;
-    color: #c74f86;
-    background: #fff0f6;
-    border-left: 3px solid #f18ab3;
-    border-radius: 0 14px 14px 0;
-    font-family: "Dancing Script", cursive;
-    font-size: clamp(22px, 5vw, 29px);
-    line-height: 1.7;
-    overflow-wrap: anywhere;
+    margin-top: 24px;
+    color: var(--pink-dark);
+    font-family: var(--font-serif);
+    font-style: italic;
 }
 
-.final-message {
-    margin-top: 26px;
-}
-
-/* CHU KY QUANG HAI */
-
-.signature-box {
-    margin: 34px auto 0;
-    padding: 23px 14px;
-    border-top: 1px dashed #edbfd1;
-    border-bottom: 1px dashed #edbfd1;
-    background: linear-gradient(135deg, #fffafd, #fff1f7);
-    border-radius: 15px;
-}
-
-.signature-flower {
-    margin-bottom: 8px;
-    font-size: 30px;
-}
-
-.signature-label {
-    margin: 0;
-    color: #a27c8e;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-}
-
-.signature-name {
-    margin: 8px 0;
-    color: #d94e88;
-    font-family: "Dancing Script", cursive;
-    font-size: 36px;
-    font-weight: 700;
-}
-
-.signature-note {
-    margin: 0;
-    color: #a27c8e;
-    font-size: 11px;
-    line-height: 1.8;
-}
-
-/* CAC NUT */
-
-.button-group {
+.sender {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 14px;
-    margin-top: 34px;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: 13px;
 }
 
-.button-group button {
-    margin-top: 4px;
+.sender strong {
+    color: var(--pink-dark);
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 23px;
 }
 
-/* LOP HIEU UNG */
+.card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 24px 28px;
+}
 
+.secondary-button {
+    color: white;
+    background: linear-gradient(135deg, #f47eaa, #dc568a);
+}
+
+.text-button {
+    align-self: center;
+    padding: 8px 14px;
+    border: 0;
+    color: var(--muted);
+    background: transparent;
+    cursor: pointer;
+    transition: color 250ms var(--ease);
+}
+
+footer {
+    position: relative;
+    z-index: 1;
+    padding: 12px;
+    color: #a56d84;
+    text-align: center;
+    font-size: 12px;
+}
+
+/* ========== LỚP HIỆU ỨNG ========== */
 #star-layer,
 #effects-layer {
     position: fixed;
     inset: 0;
     overflow: hidden;
     pointer-events: none;
+    contain: layout paint;
 }
 
 #star-layer {
@@ -441,66 +466,25 @@ button {
     z-index: 5;
 }
 
-/* SAO */
-
+/* ========== SAO LẤP LÁNH ========== */
 .star {
     position: absolute;
     width: 3px;
     height: 3px;
     border-radius: 50%;
     background: white;
-    opacity: 0.75;
-    animation: twinkle 4s ease-in-out infinite alternate;
+    box-shadow: 0 0 8px #f39abb;
+    opacity: .2;
+    animation: star-twinkle 3s ease-in-out infinite alternate;
+    will-change: opacity;
 }
 
-@keyframes twinkle {
-    from {
-        opacity: 0.25;
-        transform: scale(0.8);
-    }
-
-    to {
-        opacity: 0.9;
-        transform: scale(1.25);
-    }
+@keyframes star-twinkle {
+    from { opacity: .15; }
+    to { opacity: var(--max-opacity, .9); }
 }
 
-/* TRAI TIM BAY */
-
-.floating-heart {
-    position: absolute;
-    left: var(--x);
-    bottom: -35px;
-    color: var(--heart-color);
-    font-size: var(--heart-size);
-    line-height: 1;
-    text-shadow: 0 2px 6px rgba(255, 105, 165, 0.15);
-    animation: heart-rise var(--duration) ease-out forwards;
-    will-change: transform, opacity;
-}
-
-@keyframes heart-rise {
-    0% {
-        opacity: 0;
-        transform: translate3d(0, 0, 0) rotate(0);
-    }
-
-    12% {
-        opacity: 0.95;
-    }
-
-    85% {
-        opacity: 0.75;
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate3d(var(--drift), -110vh, 0) rotate(var(--rotation));
-    }
-}
-
-/* PHAO HOA THUONG */
-
+/* ========== PHÁO HOA ========== */
 .firework {
     position: absolute;
     width: 1px;
@@ -508,183 +492,220 @@ button {
     pointer-events: none;
 }
 
-.firework-particle {
+.firework-particle,
+.heart-firework-particle {
     position: absolute;
-    top: 0;
     left: 0;
-    width: var(--particle-size, 5px);
-    height: var(--particle-size, 5px);
+    top: 0;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
-    background: var(--particle-color);
-    box-shadow:
-        0 0 6px var(--particle-color),
-        0 0 13px var(--particle-color);
-    animation: firework-pop var(--particle-duration, 1.4s)
-        cubic-bezier(0.12, 0.6, 0.25, 1) forwards;
+    background: var(--particle-color, #ff80ac);
+    box-shadow: 0 0 7px var(--particle-color, #ff80ac);
+    opacity: 0;
+    animation: firework-pop 1.3s cubic-bezier(.15, .7, .3, 1) forwards;
     will-change: transform, opacity;
+}
+
+.heart-firework-particle {
+    width: 6px;
+    height: 6px;
 }
 
 @keyframes firework-pop {
     0% {
         opacity: 1;
-        transform: translate(0, 0) scale(0.6);
+        transform: translate3d(-50%, -50%, 0) scale(1);
     }
 
-    20% {
+    70% {
         opacity: 1;
     }
 
     100% {
         opacity: 0;
-        transform: translate(var(--dx), var(--dy)) scale(0.15);
+        transform:
+            translate3d(
+                calc(var(--dx) - 50%),
+                calc(var(--dy) - 50%),
+                0
+            )
+            scale(.2);
     }
 }
 
-/* PHAO HOA HINH TRAI TIM */
-
-.heart-firework-particle {
+/* ========== ẢNH PHANH.SVG BAY NHƯ BÓNG BAY ========== */
+.special-firework {
     position: absolute;
-    top: 0;
-    left: 0;
-    color: var(--particle-color);
-    font-size: var(--particle-size, 13px);
-    line-height: 1;
-    text-shadow:
-        0 0 5px var(--particle-color),
-        0 0 12px var(--particle-color);
-    animation: heart-firework-pop var(--particle-duration, 1.7s)
-        ease-out forwards;
+    top: 100%;
+    display: block;
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+    filter: drop-shadow(0 5px 10px rgb(255 94 157 / 25%));
+    animation: phanh-balloon 7s linear forwards;
     will-change: transform, opacity;
 }
 
-@keyframes heart-firework-pop {
+@keyframes phanh-balloon {
     0% {
         opacity: 0;
-        transform: translate(0, 0) scale(0.2);
+        transform: translate3d(0, 0, 0) rotate(-8deg);
     }
 
-    18% {
+    8% {
         opacity: 1;
     }
 
+    25% {
+        transform: translate3d(18px, -30vh, 0) rotate(7deg);
+    }
+
+    50% {
+        transform: translate3d(-16px, -62vh, 0) rotate(-6deg);
+    }
+
     75% {
-        opacity: 0.9;
+        opacity: 1;
+        transform: translate3d(14px, -92vh, 0) rotate(5deg);
     }
 
     100% {
         opacity: 0;
-        transform: translate(var(--dx), var(--dy)) scale(0.7);
+        transform: translate3d(-8px, -125vh, 0) rotate(-4deg);
     }
 }
 
-/* HIEN THI TREN DIEN THOAI */
+/* ========== BÓNG BÓNG TRÁI TIM BAY LÊN ========== */
+.heart-bubble {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    line-height: 1;
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+    text-shadow: 0 0 12px rgb(255 105 160 / 35%);
+    animation: heart-bubble-float var(--duration, 8s) linear forwards;
+    will-change: transform, opacity;
+}
 
-@media (max-width: 600px) {
-    body {
-        padding: 14px 10px;
-        align-items: flex-start;
+.heart-bubble::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgb(255 255 255 / 65%);
+    border-radius: 50%;
+    background: radial-gradient(
+        circle at 30% 25%,
+        rgb(255 255 255 / 65%),
+        rgb(255 160 200 / 15%) 45%,
+        rgb(255 90 150 / 12%)
+    );
+    box-shadow:
+        inset -3px -4px 8px rgb(255 80 140 / 15%),
+        0 0 12px rgb(255 100 160 / 12%);
+    z-index: -1;
+}
+
+@keyframes heart-bubble-float {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 80px, 0) rotate(-10deg) scale(.7);
     }
 
-    .app {
-        margin: auto 0;
+    10% {
+        opacity: .9;
+    }
+
+    25% {
+        transform: translate3d(18px, -25vh, 0) rotate(8deg) scale(1);
+    }
+
+    50% {
+        transform: translate3d(-16px, -55vh, 0) rotate(-8deg) scale(1.05);
+    }
+
+    75% {
+        opacity: .85;
+        transform: translate3d(14px, -85vh, 0) rotate(7deg) scale(.98);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(-10px, -115vh, 0) rotate(-5deg) scale(.8);
+    }
+}
+
+/* ========== ĐIỆN THOẠI ========== */
+@media (max-width: 600px) {
+    .page {
+        min-height: calc(100vh - 40px);
+        padding: 18px 12px;
     }
 
     .panel {
-        padding: 29px 18px;
         border-radius: 23px;
-    }
-
-    .eyebrow {
-        font-size: 10px;
-        letter-spacing: 1.7px;
-    }
-
-    .intro {
-        font-size: 13px;
-    }
-
-    .mini-bouquet {
-        font-size: 58px;
-    }
-
-    #name-form {
-        margin-top: 22px;
+        padding: 25px 20px;
     }
 
     .card-panel {
-        padding: 27px 16px;
+        padding: 0;
     }
 
-    .bouquet-wrap {
-        margin-top: 21px;
-        margin-bottom: 24px;
+    .card-top {
+        padding: 32px 18px 22px;
     }
 
-    .bouquet {
-        font-size: 112px;
+    .message-content {
+        padding: 12px 20px 24px;
+        font-size: 14px;
     }
 
-    .messages {
-        gap: 17px;
+    .wish-list p {
+        padding: 10px 11px;
     }
 
-    .message {
-        font-size: 12px;
-        line-height: 1.95;
+    .card-actions {
+        padding: 0 20px 24px;
     }
 
-    .wishes {
-        gap: 8px;
-        margin: 22px 0;
+    .special-firework {
+        width: 100px;
+        height: 100px;
     }
 
-    .wishes span {
-        padding: 9px 6px;
-        font-size: 10px;
+    .heart-bubble {
+        font-size: 23px;
     }
 
-    .button-group {
-        flex-direction: column;
-        gap: 13px;
-        margin-top: 32px;
-    }
-
-    .button-group button {
-        width: 100%;
-        min-height: 49px;
-        margin-top: 0;
-    }
-
-    .signature-name {
-        font-size: 34px;
-    }
-
-    .decoration-one,
-    .decoration-two {
-        font-size: 27px;
-    }
-
-    .firework-particle {
-        box-shadow:
-            0 0 9px var(--particle-color),
-            0 0 18px var(--particle-color);
-    }
-
+    .firework-particle,
     .heart-firework-particle {
-        text-shadow:
-            0 0 7px var(--particle-color),
-            0 0 14px var(--particle-color);
+        width: 4px;
+        height: 4px;
+        box-shadow: none;
     }
 }
 
-/* GIAM HIEU UNG KHI NGUOI DUNG CHON REDUCED MOTION */
-
+/* ========== GIẢM CHUYỂN ĐỘNG ========== */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms !important;
+        animation-duration: .01ms !important;
+        animation-delay: 0ms !important;
         animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .heart-bubble {
+        display: none;
     }
 }

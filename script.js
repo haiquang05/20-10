@@ -1,429 +1,439 @@
-
 "use strict";
 
-/* CAU HINH */
-const CFG = {
-    sender: "Quang Hải",
-    line1: "Có một điều nhỏ bé",
-    line2: "muốn gửi đến bạn...",
-    maxHearts: 18
-};
-
-/* CAC PHAN TU HTML */
+/* ========== CÁC PHẦN TỬ HTML ========== */
 const nameScreen = document.getElementById("name-screen");
 const nameForm = document.getElementById("name-form");
 const recipientInput = document.getElementById("recipient-input");
+const inputError = document.getElementById("input-error");
 
 const stage = document.getElementById("stage");
-const line1 = document.getElementById("l1");
-const line2 = document.getElementById("l2");
+const l1 = document.getElementById("l1");
+const l2 = document.getElementById("l2");
 const decodeButton = document.getElementById("decode-button");
 
 const cardScreen = document.getElementById("card-screen");
-const recipientName = document.getElementById("name");
-
+const nameElement = document.getElementById("name");
+const messageElement = document.getElementById("message");
 const moreHeartsButton = document.getElementById("more-hearts");
 const backButton = document.getElementById("back-button");
 
 const effectsLayer = document.getElementById("effects-layer");
 const starLayer = document.getElementById("star-layer");
 
-/* TRANG THAI */
-let cardShown = false;
-let activeHearts = 0;
-let sessionId = 0;
-let effectTimers = [];
-let lastBurstTime = 0;
+const screens = [nameScreen, stage, cardScreen];
 
+/* ========== CẤU HÌNH ========== */
 const isMobile = window.matchMedia("(max-width: 600px)").matches;
-const reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-).matches;
-
-const MAX_FIREWORKS = isMobile ? 2 : 3;
-
-const HEART_COLORS = [
-    "#ff1744",
-    "#ff4081",
-    "#ff80ab",
-    "#e040fb",
-    "#ea80fc",
-    "#ffd740",
-    "#ff9100",
-    "#ffffff"
-];
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const FIREWORK_COLORS = [
-    "#ff1744",
-    "#ff4081",
-    "#ff80ab",
-    "#ff9100",
-    "#ffea00",
-    "#76ff03",
-    "#00e5ff",
-    "#2979ff",
-    "#7c4dff",
-    "#ffffff",
-    "#ff6d00",
-    "#f500ff"
+    "#ff4f91", "#ff85a1", "#ffd166", "#ff9f1c",
+    "#c77dff", "#7bdff2", "#f15bb5", "#ffffff"
 ];
+const HEART_COLORS = ["#ff5c96", "#ff8fab", "#f7a8d8", "#d98bff", "#ffb6c9"];
 
+const MAX_FIREWORKS = isMobile ? 2 : 3;
+const MAX_SPECIAL_BALLOONS = isMobile ? 2 : 3;
+const MAX_HEART_BUBBLES = isMobile ? 6 : 10;
+const SCREEN_FADE_MS = 300;
 
-/* THAY TEN TRONG CAC LOI CHUC */
-function personalizeCard(name) {
-    recipientName.textContent = name;
+let recipientName = "";
+let specialRecipient = false;
+let cardShown = false;
+let sessionId = 0;
+let screenToken = 0;
+let currentScreen = nameScreen;
+let lastMoreHearts = 0;
 
-    const elements = cardScreen.querySelectorAll("[data-template]");
+const effectTimers = new Set();
 
-    elements.forEach((element) => {
-        element.textContent = element.dataset.template.replace(
-            /\{\{ten\}\}/g,
-            name
-        );
-    });
+/* ========== TIỆN ÍCH ========== */
+function randomBetween(min, max) {
+    return min + Math.random() * (max - min);
 }
 
+function pick(list) {
+    return list[Math.floor(Math.random() * list.length)];
+}
 
-/* QUAN LY HIEU UNG */
 function scheduleEffect(callback, delay, currentSession = sessionId) {
-    const timer = window.setTimeout(() => {
-        effectTimers = effectTimers.filter((id) => id !== timer);
-
+    const timer = setTimeout(() => {
+        effectTimers.delete(timer);
         if (currentSession !== sessionId) return;
-
         callback();
     }, delay);
 
-    effectTimers.push(timer);
+    effectTimers.add(timer);
     return timer;
 }
 
-
 function clearEffects() {
     sessionId++;
-
-    effectTimers.forEach((timer) => {
-        window.clearTimeout(timer);
-    });
-
-    effectTimers = [];
-    activeHearts = 0;
-    lastBurstTime = 0;
-
-    if (effectsLayer) {
-        effectsLayer.replaceChildren();
-    }
-
-    moreHeartsButton.disabled = false;
-    moreHeartsButton.textContent = "Thêm yêu thương ♥";
+    effectTimers.forEach((timer) => clearTimeout(timer));
+    effectTimers.clear();
+    effectsLayer.replaceChildren();
 }
 
+// Tự xóa phần tử khi animation xong (kèm timer dự phòng)
+function removeWhenDone(element, fallbackMs) {
+    const remove = () => element.remove();
+    element.addEventListener("animationend", remove, { once: true });
+    scheduleEffect(remove, fallbackMs);
+}
 
-/* TAO SAO */
+// Không sinh hiệu ứng khi đang ở tab khác
+function canAnimate() {
+    return cardShown && !reduceMotion && !document.hidden;
+}
+
+/* ========== CHUYỂN MÀN HÌNH MƯỢT ========== */
+function showScreen(next) {
+    const token = ++screenToken;
+    const prev = currentScreen;
+    currentScreen = next;
+
+    if (prev !== next) prev.classList.add("leaving");
+
+    const wait = reduceMotion ? 0 : SCREEN_FADE_MS;
+
+    setTimeout(() => {
+        if (token !== screenToken) return;
+
+        screens.forEach((screen) => {
+            if (screen !== next) {
+                screen.classList.add("hidden");
+                screen.classList.remove("leaving");
+            }
+        });
+
+        next.classList.remove("hidden", "leaving");
+    }, prev === next ? 0 : wait);
+}
+
+/* ========== KIỂM TRA TÊN ĐẶC BIỆT ========== */
+function isSpecialName(name) {
+    const normalized = name
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/gi, "d")
+        .toLowerCase();
+
+    return normalized.includes("p") && normalized.includes("a");
+}
+
+/* ========== SAO LẤP LÁNH ========== */
 function createStars() {
-    if (!starLayer || reduceMotion) return;
-
     const fragment = document.createDocumentFragment();
-    const starCount = isMobile ? 10 : 18;
+    const starCount = isMobile ? 18 : 35;
 
     for (let i = 0; i < starCount; i++) {
         const star = document.createElement("span");
-
         star.className = "star";
-        star.style.left = `${Math.random() * 100}%`;
-        star.style.top = `${Math.random() * 100}%`;
-        star.style.animationDelay = `${Math.random() * 3}s`;
-
+        star.style.left = randomBetween(0, 100) + "%";
+        star.style.top = randomBetween(0, 100) + "%";
+        star.style.setProperty("--max-opacity", randomBetween(0.4, 0.9).toFixed(2));
+        star.style.animationDelay = randomBetween(0, 3) + "s";
+        star.style.animationDuration = randomBetween(2.5, 4.5) + "s";
         fragment.appendChild(star);
     }
 
-    starLayer.replaceChildren(fragment);
+    starLayer.appendChild(fragment);
 }
 
-
-/* NHAP TEN NGUOI NHAN */
-nameForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const enteredName = recipientInput.value.trim();
-
-    if (!enteredName) {
-        recipientInput.focus();
-        return;
-    }
-
-    clearEffects();
-    personalizeCard(enteredName);
-
-    line1.textContent = CFG.line1;
-    line2.textContent = `${CFG.line2.replace("bạn", enteredName)}`;
-
-    nameScreen.classList.add("hidden");
-    cardScreen.classList.add("hidden");
-    stage.classList.remove("hidden");
-
-    cardShown = false;
-});
-
-
-/* MO LOI CHUC */
-decodeButton.addEventListener("click", () => {
-    if (cardShown) return;
-
-    cardShown = true;
-
-    stage.classList.add("hidden");
-    cardScreen.classList.remove("hidden");
-
-    createHeartBurst(isMobile ? 6 : 9);
-
-    // Tao mot dot phao hoa khi mo thiep
-    launchFireworks();
-});
-
-
-/* TAO TRAI TIM BAY */
-function createHeart() {
-    if (!effectsLayer || !cardShown || reduceMotion) return;
-    if (activeHearts >= CFG.maxHearts) return;
-
-    activeHearts++;
-
-    const heart = document.createElement("span");
-
-    heart.className = "floating-heart";
-    heart.textContent = Math.random() > 0.2 ? "♥" : "♡";
-    heart.setAttribute("aria-hidden", "true");
-
-    const size = 18 + Math.random() * (isMobile ? 13 : 20);
-    const duration = 4 + Math.random() * 1.5;
-    const drift = -45 + Math.random() * 90;
-    const rotation = -30 + Math.random() * 60;
-
-    const color =
-        HEART_COLORS[Math.floor(Math.random() * HEART_COLORS.length)];
-
-    heart.style.setProperty("--x", `${Math.random() * 90 + 5}%`);
-    heart.style.setProperty("--heart-size", `${size}px`);
-    heart.style.setProperty("--duration", `${duration}s`);
-    heart.style.setProperty("--drift", `${drift}px`);
-    heart.style.setProperty("--rotation", `${rotation}deg`);
-    heart.style.setProperty("--heart-color", color);
-
-    const currentSession = sessionId;
-    let removed = false;
-
-    function removeHeart() {
-        if (removed) return;
-
-        removed = true;
-        heart.remove();
-
-        if (currentSession === sessionId) {
-            activeHearts = Math.max(0, activeHearts - 1);
-        }
-    }
-
-    heart.addEventListener("animationend", removeHeart, { once: true });
-    effectsLayer.appendChild(heart);
-
-    scheduleEffect(removeHeart, (duration + 1) * 1000, currentSession);
-}
-
-
-/* TAO DOT TRAI TIM */
-function createHeartBurst(count = 8) {
-    if (!cardShown || reduceMotion) return;
-
-    const now = Date.now();
-
-    if (now - lastBurstTime < 1000) return;
-
-    lastBurstTime = now;
-
-    const currentSession = sessionId;
-    const total = Math.min(count, isMobile ? 7 : 10);
-    const interval = isMobile ? 160 : 120;
-
-    for (let i = 0; i < total; i++) {
-        scheduleEffect(() => {
-            if (cardShown) createHeart();
-        }, i * interval, currentSession);
-    }
-}
-
-
-/* TAO PHAO HOA */
+/* ========== PHÁO HOA TRÒN VÀ TRÁI TIM ========== */
 function createFirework(x, y, heartShape = false) {
-    if (!effectsLayer || !cardShown || reduceMotion) return;
+    if (!canAnimate()) return;
 
-    const existing = effectsLayer.querySelectorAll(".firework");
-
-    // Gioi han so cum phao hoa de tranh lag
-    if (existing.length >= MAX_FIREWORKS) {
-        existing[0].remove();
-    }
+    // Đủ số lượng thì bỏ qua, không xóa cái đang nổ cho khỏi giật
+    if (effectsLayer.querySelectorAll(".firework").length >= MAX_FIREWORKS) return;
 
     const firework = document.createElement("div");
     firework.className = "firework";
-    firework.style.left = `${x}%`;
-    firework.style.top = `${y}%`;
-
-    const fragment = document.createDocumentFragment();
+    firework.style.left = x + "%";
+    firework.style.top = y + "%";
 
     const particleCount = isMobile
-        ? (heartShape ? 32 : 42)
-        : (heartShape ? 48 : 60);
-
-    const radius = isMobile ? 95 : 140;
+        ? (heartShape ? 12 : 16)
+        : (heartShape ? 20 : 26);
+    const radius = isMobile ? 75 : 115;
+    const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement("span");
-
-        const color =
-            FIREWORK_COLORS[
-                Math.floor(Math.random() * FIREWORK_COLORS.length)
-            ];
-
-        particle.style.setProperty("--particle-color", color);
-        particle.style.setProperty(
-            "--particle-duration",
-            `${1.2 + Math.random() * 0.65}s`
-        );
+        const angle = (Math.PI * 2 * i) / particleCount;
+        let dx, dy;
 
         if (heartShape) {
+            const hx = 16 * Math.pow(Math.sin(angle), 3);
+            const hy = 13 * Math.cos(angle)
+                     - 5 * Math.cos(2 * angle)
+                     - 2 * Math.cos(3 * angle)
+                     - Math.cos(4 * angle);
+            dx = (hx / 16) * radius;
+            dy = (-hy / 16) * radius;
             particle.className = "heart-firework-particle";
-            particle.textContent = "♥";
-
-            // Cong thuc toa do tao hinh trai tim
-            const t = (Math.PI * 2 * i) / particleCount;
-
-            const hx = 16 * Math.pow(Math.sin(t), 3);
-            const hy =
-                13 * Math.cos(t) -
-                5 * Math.cos(2 * t) -
-                2 * Math.cos(3 * t) -
-                Math.cos(4 * t);
-
-            const scale = radius / 18;
-
-            particle.style.setProperty("--dx", `${hx * scale}px`);
-            particle.style.setProperty("--dy", `${-hy * scale}px`);
-            particle.style.setProperty(
-                "--particle-size",
-                `${isMobile ? 10 : 13}px`
-            );
         } else {
+            const distance = radius * randomBetween(0.55, 1);
+            dx = Math.cos(angle) * distance;
+            dy = Math.sin(angle) * distance;
             particle.className = "firework-particle";
-
-            const angle = (Math.PI * 2 * i) / particleCount;
-            const distance = radius * (0.55 + Math.random() * 0.65);
-
-            particle.style.setProperty(
-                "--dx",
-                `${Math.cos(angle) * distance}px`
-            );
-
-            particle.style.setProperty(
-                "--dy",
-                `${Math.sin(angle) * distance}px`
-            );
-
-            particle.style.setProperty(
-                "--particle-size",
-                `${isMobile ? 4 : 5}px`
-            );
         }
 
+        particle.style.setProperty("--dx", dx.toFixed(1) + "px");
+        particle.style.setProperty("--dy", dy.toFixed(1) + "px");
+        particle.style.setProperty("--particle-color", pick(FIREWORK_COLORS));
+        particle.style.animationDelay = randomBetween(0, 100) + "ms";
         fragment.appendChild(particle);
     }
 
     firework.appendChild(fragment);
     effectsLayer.appendChild(firework);
 
-    const currentSession = sessionId;
-
-    scheduleEffect(() => {
-        firework.remove();
-    }, 2200, currentSession);
+    scheduleEffect(() => firework.remove(), 1600);
 }
 
-
-/* BAN PHAO HOA NHIEU MAU VA PHAO HOA TRAI TIM */
-
+/* ========== BẮN PHÁO HOA NGẪU NHIÊN ========== */
 function launchFireworks() {
     if (!cardShown || reduceMotion) return;
 
     const currentSession = sessionId;
-
-    // So dot phao hoa trong moi dot bam
     const total = isMobile ? 5 : 8;
 
-    function launchRandomFirework(index) {
+    function launchOne(index) {
         if (!cardShown || currentSession !== sessionId) return;
 
-        // Vi tri ngau nhien, tranh sat mep man hinh
-        const x = 10 + Math.random() * 80;
-        const y = 12 + Math.random() * 48;
+        createFirework(
+            randomBetween(10, 90),
+            randomBetween(12, 55),
+            Math.random() < 0.4
+        );
 
-        // Chon ngau nhien phao hoa tron hoac hinh trai tim
-        const heartShape = Math.random() < 0.4;
-
-        createFirework(x, y, heartShape);
-
-        // Khoang cach giua cac lan no khong co dinh
         if (index + 1 < total) {
-            const delay = 250 + Math.random() * 750;
-
-            scheduleEffect(() => {
-                launchRandomFirework(index + 1);
-            }, delay, currentSession);
+            scheduleEffect(
+                () => launchOne(index + 1),
+                randomBetween(250, 750),
+                currentSession
+            );
         }
     }
 
-    // Khong no ngay lap tuc tat ca, ma lan luot bat dau
-    scheduleEffect(() => {
-        launchRandomFirework(0);
-    }, 100 + Math.random() * 500, currentSession);
+    scheduleEffect(() => launchOne(0), randomBetween(100, 400), currentSession);
 }
 
-
-
-/* NUT THEM YEU THUONG */
-moreHeartsButton.addEventListener("click", () => {
-    if (!cardShown || cardScreen.classList.contains("hidden")) return;
-    if (moreHeartsButton.disabled) return;
-
-    moreHeartsButton.disabled = true;
-    moreHeartsButton.textContent = "Yêu thương ngập tràn! 💖";
-
-    createHeartBurst(isMobile ? 7 : 10);
-    launchFireworks();
+/* ========== PHÁO HOA THƯỜNG TỰ ĐỘNG ========== */
+function startRandomFireworks() {
+    if (!cardShown || reduceMotion) return;
 
     const currentSession = sessionId;
 
     scheduleEffect(() => {
-        if (cardShown && moreHeartsButton.isConnected) {
-            moreHeartsButton.textContent = "Thêm yêu thương ♥";
-            moreHeartsButton.disabled = false;
+        if (!cardShown || currentSession !== sessionId) return;
+
+        createFirework(
+            randomBetween(10, 90),
+            randomBetween(12, 52),
+            Math.random() < 0.4
+        );
+
+        startRandomFireworks();
+    }, randomBetween(1200, 2300), currentSession);
+}
+
+/* ========== ẢNH PHANH.SVG BAY NHƯ BÓNG BAY ========== */
+function createSpecialFirework(x) {
+    if (!canAnimate() || !specialRecipient) return;
+
+    if (effectsLayer.querySelectorAll(".special-firework").length >= MAX_SPECIAL_BALLOONS) return;
+
+    const img = document.createElement("img");
+    const duration = randomBetween(6, 8);
+
+    img.src = "phanh.svg";
+    img.className = "special-firework";
+    img.alt = "";
+    img.draggable = false;
+    img.decoding = "async";
+
+    img.style.left = x + "%";
+    img.style.animationDuration = duration + "s";
+
+    img.onerror = () => {
+        console.error("Không tải được phanh.svg. Kiểm tra file nằm cùng thư mục với index.html.");
+        img.remove();
+    };
+
+    effectsLayer.appendChild(img);
+    removeWhenDone(img, (duration + 0.5) * 1000);
+}
+
+/* ========== BẮN NHIỀU ẢNH PHANH BAY LÊN ========== */
+function launchSpecialFireworks() {
+    if (!cardShown || !specialRecipient || reduceMotion) return;
+
+    const currentSession = sessionId;
+    const total = isMobile ? 4 : 7;
+
+    function launchOne(index) {
+        if (!cardShown || currentSession !== sessionId) return;
+
+        createSpecialFirework(randomBetween(8, 88));
+
+        if (index + 1 < total) {
+            scheduleEffect(
+                () => launchOne(index + 1),
+                randomBetween(500, 900),
+                currentSession
+            );
         }
-    }, 2500, currentSession);
-});
+    }
 
+    scheduleEffect(() => launchOne(0), 250, currentSession);
+}
 
-/* DOI TEN NGUOI NHAN */
-backButton.addEventListener("click", () => {
-    cardShown = false;
+/* ========== ĐỢT TRÁI TIM PHÁO HOA ========== */
+function createHeartBurst(total) {
+    if (!cardShown || reduceMotion) return;
+
+    const currentSession = sessionId;
+
+    for (let i = 0; i < total; i++) {
+        scheduleEffect(() => {
+            createFirework(randomBetween(15, 85), randomBetween(20, 70), true);
+        }, i * 200, currentSession);
+    }
+}
+
+/* ========== BÓNG BÓNG TRÁI TIM BAY LÊN ========== */
+function createHeartBubble() {
+    if (!canAnimate()) return;
+
+    if (effectsLayer.querySelectorAll(".heart-bubble").length >= MAX_HEART_BUBBLES) return;
+
+    const bubble = document.createElement("span");
+    const duration = randomBetween(6, 10);
+
+    bubble.className = "heart-bubble";
+    bubble.textContent = Math.random() < 0.5 ? "♥" : "♡";
+    bubble.setAttribute("aria-hidden", "true");
+
+    bubble.style.left = randomBetween(3, 95) + "%";
+    bubble.style.fontSize = randomBetween(
+        isMobile ? 17 : 22,
+        isMobile ? 30 : 42
+    ) + "px";
+    bubble.style.color = pick(HEART_COLORS);
+    bubble.style.setProperty("--duration", duration + "s");
+
+    effectsLayer.appendChild(bubble);
+    removeWhenDone(bubble, (duration + 0.5) * 1000);
+}
+
+/* ========== TẠO BÓNG BÓNG LIÊN TỤC ========== */
+function startHeartBubbles() {
+    if (!cardShown || reduceMotion) return;
+
+    const currentSession = sessionId;
+
+    scheduleEffect(() => {
+        if (!cardShown || currentSession !== sessionId) return;
+
+        createHeartBubble();
+        startHeartBubbles();
+    }, randomBetween(isMobile ? 800 : 450, isMobile ? 1500 : 950), currentSession);
+}
+
+/* ========== CÁ NHÂN HÓA LỜI CHÚC ========== */
+function updatePersonalizedText(name) {
+    nameElement.textContent = name;
+    l1.textContent = name;
+
+    l2.textContent = "Món quà nhỏ này được gửi riêng đến " + name + " 💗";
+
+    messageElement.textContent =
+        "Chúc " + name +
+        " có một ngày 20/10 thật vui vẻ, luôn được yêu thương, trân trọng và gặp thật nhiều điều tốt đẹp.";
+
+    document.querySelectorAll("[data-template]").forEach((element) => {
+        element.textContent = element.dataset.template.replace(/\{\{ten\}\}/g, name);
+    });
+}
+
+/* ========== NHẬP TÊN NGƯỜI NHẬN ========== */
+nameForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const enteredName = recipientInput.value.trim();
+
+    if (!enteredName) {
+        inputError.textContent = "Bạn hãy nhập tên người nhận nhé!";
+        recipientInput.focus();
+        return;
+    }
+
+    inputError.textContent = "";
+    recipientName = enteredName;
+    specialRecipient = isSpecialName(recipientName);
+
+    updatePersonalizedText(recipientName);
 
     clearEffects();
+    cardShown = false;
 
-    cardScreen.classList.add("hidden");
-    stage.classList.add("hidden");
-    nameScreen.classList.remove("hidden");
-
-    recipientInput.focus();
+    showScreen(stage);
 });
 
+/* ========== MỞ THIỆP VÀ KHỞI ĐỘNG HIỆU ỨNG ========== */
+decodeButton.addEventListener("click", () => {
+    if (cardShown) return;
 
-/* KHOI TAO */
+    clearEffects();
+    cardShown = true;
+
+    showScreen(cardScreen);
+
+    // Chờ thiệp hiện ra rồi mới bắn hiệu ứng cho mượt
+    const startDelay = reduceMotion ? 0 : SCREEN_FADE_MS + 150;
+
+    scheduleEffect(() => {
+        createHeartBurst(isMobile ? 4 : 6);
+        launchFireworks();
+        startRandomFireworks();
+        startHeartBubbles();
+
+        if (specialRecipient) launchSpecialFireworks();
+    }, startDelay);
+});
+
+/* ========== NÚT THÊM YÊU THƯƠNG ========== */
+moreHeartsButton.addEventListener("click", () => {
+    if (!cardShown) return;
+
+    // Chống bấm liên tục gây lag
+    const now = performance.now();
+    if (now - lastMoreHearts < 700) return;
+    lastMoreHearts = now;
+
+    const total = isMobile ? 2 : 3;
+
+    for (let i = 0; i < total; i++) {
+        scheduleEffect(createHeartBubble, i * 180);
+    }
+
+    createFirework(randomBetween(20, 80), randomBetween(25, 55), true);
+
+    if (specialRecipient) {
+        createSpecialFirework(randomBetween(15, 85));
+    }
+});
+
+/* ========== QUAY LẠI MÀN HÌNH NHẬP TÊN ========== */
+backButton.addEventListener("click", () => {
+    cardShown = false;
+    clearEffects();
+    showScreen(nameScreen);
+
+    setTimeout(() => recipientInput.focus({ preventScroll: true }), SCREEN_FADE_MS + 50);
+});
+
+/* ========== KHỞI TẠO TRANG ========== */
 createStars();
