@@ -748,3 +748,67 @@ h2 {
         font-size: 21px;
     }
 }
+
+/* =====================================
+   TOI UU HIEU UNG THIEP 20/10
+   UU TIEN DIEN THOAI
+===================================== */
+
+/* Han che cac hieu ung phat sang nang */
+.firework-particle,
+.firework-spark {
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+.floating-heart {
+    text-shadow: none !important;
+    filter: none !important;
+}
+
+/* Tranh hieu ung lam mo toan bo man hinh */
+#effects-layer {
+    pointer-events: none;
+}
+
+/* Toi uu hien thi tren dien thoai */
+@media (max-width: 600px) {
+    .firework-particle,
+    .firework-spark {
+        box-shadow: none !important;
+        filter: none !important;
+    }
+
+    .floating-heart {
+        text-shadow: none !important;
+        filter: none !important;
+    }
+
+    .star {
+        box-shadow: none !important;
+        filter: none !important;
+    }
+
+    #more-hearts,
+    #back-button,
+    #decode-button {
+        touch-action: manipulation;
+    }
+}
+
+/* Ton trong cai dat giam chuyen dong cua thiet bi */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+    }
+
+    .floating-heart,
+    .firework-particle,
+    .firework-spark,
+    .star {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
