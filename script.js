@@ -1,16 +1,15 @@
 
 "use strict";
 
-/* =========================
+/* =====================================
    CAU HINH THIEP 20/10
-   Toi uu hieu ung cho dien thoai
-========================= */
+===================================== */
 
 const CFG = {
     name: "",
-    sender: "Người luôn mong em vui",
+    sender: "Người luôn mong {{ten}} vui",
     line1: "Có một điều nhỏ bé",
-    line2: "muốn gửi đến em...",
+    line2: "muốn gửi đến {{ten}}...",
     maxHearts: 24
 };
 
@@ -33,10 +32,6 @@ const backButton = document.getElementById("back-button");
 const effectsLayer = document.getElementById("effects-layer");
 const starLayer = document.getElementById("star-layer");
 
-/* =========================
-   TRANG THAI VA GIOI HAN
-========================= */
-
 let cardShown = false;
 let activeHearts = 0;
 let sessionId = 0;
@@ -48,7 +43,6 @@ const reduceMotion = window.matchMedia(
 ).matches;
 
 const MAX_FIREWORKS = isMobile ? 2 : 3;
-const HEART_BURST_COUNT = reduceMotion ? 0 : (isMobile ? 8 : 12);
 
 const HEART_COLORS = [
     "#ff8fbd",
@@ -68,9 +62,42 @@ const FIREWORK_COLORS = [
     "#ffb3c6"
 ];
 
-/* =========================
-   QUAN LY TIMER HIEU UNG
-========================= */
+/* =====================================
+   THAY TEN TRONG TOAN BO LOI CHUC
+===================================== */
+
+function personalizeCard(name) {
+    const textNodes = [];
+    const walker = document.createTreeWalker(
+        cardScreen,
+        NodeFilter.SHOW_TEXT
+    );
+
+    let node;
+
+    while ((node = walker.nextNode())) {
+        textNodes.push(node);
+    }
+
+    textNodes.forEach(textNode => {
+        /*
+         * Luu mau goc mot lan de khi doi ten,
+         * noi dung khong bi lap ten cu.
+         */
+        if (textNode.__originalTemplate === undefined) {
+            textNode.__originalTemplate = textNode.textContent;
+        }
+
+        textNode.textContent = textNode.__originalTemplate.replace(
+            /\{\{ten\}\}/g,
+            name
+        );
+    });
+}
+
+/* =====================================
+   QUAN LY TIMER VA HIEU UNG
+===================================== */
 
 function scheduleEffect(callback, delay, currentSession = sessionId) {
     const timer = window.setTimeout(() => {
@@ -97,16 +124,13 @@ function clearEffects() {
 
     activeHearts = 0;
 
-    if (moreHeartsButton) {
-        moreHeartsButton.disabled = false;
-        moreHeartsButton.innerHTML =
-            'Thêm yêu thương <span>♥</span>';
-    }
+    moreHeartsButton.disabled = false;
+    moreHeartsButton.innerHTML = 'Thêm yêu thương <span>♥</span>';
 }
 
-/* =========================
+/* =====================================
    TAO SAO NEN
-========================= */
+===================================== */
 
 function createStars() {
     if (!starLayer || reduceMotion) return;
@@ -129,9 +153,9 @@ function createStars() {
     starLayer.replaceChildren(fragment);
 }
 
-/* =========================
+/* =====================================
    NHAP TEN NGUOI NHAN
-========================= */
+===================================== */
 
 nameForm.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -147,10 +171,27 @@ nameForm.addEventListener("submit", function (event) {
 
     CFG.name = enteredName;
 
+    /*
+     * Cap nhat tat ca noi dung co {{ten}}.
+     */
+    personalizeCard(CFG.name);
+
     recipientName.textContent = CFG.name;
-    signature.textContent = CFG.sender;
-    line1.textContent = CFG.line1;
-    line2.textContent = CFG.line2;
+
+    signature.textContent = CFG.sender.replace(
+        /\{\{ten\}\}/g,
+        CFG.name
+    );
+
+    line1.textContent = CFG.line1.replace(
+        /\{\{ten\}\}/g,
+        CFG.name
+    );
+
+    line2.textContent = CFG.line2.replace(
+        /\{\{ten\}\}/g,
+        CFG.name
+    );
 
     nameScreen.classList.add("hidden");
     cardScreen.classList.add("hidden");
@@ -159,9 +200,9 @@ nameForm.addEventListener("submit", function (event) {
     cardShown = false;
 });
 
-/* =========================
+/* =====================================
    MO THIEP
-========================= */
+===================================== */
 
 decodeButton.addEventListener("click", function () {
     if (cardShown) return;
@@ -171,12 +212,12 @@ decodeButton.addEventListener("click", function () {
     stage.classList.add("hidden");
     cardScreen.classList.remove("hidden");
 
-    createHeartBurst(HEART_BURST_COUNT);
+    createHeartBurst(isMobile ? 8 : 12);
 });
 
-/* =========================
-   TAO MOT TRAI TIM
-========================= */
+/* =====================================
+   TAO TRAI TIM BAY
+===================================== */
 
 function createHeart() {
     if (!effectsLayer || !cardShown || reduceMotion) return;
@@ -227,14 +268,18 @@ function createHeart() {
 
     effectsLayer.appendChild(heart);
 
-    scheduleEffect(removeHeart, (duration + 1) * 1000, currentSession);
+    scheduleEffect(
+        removeHeart,
+        (duration + 1) * 1000,
+        currentSession
+    );
 }
 
-/* =========================
-   TAO MOT DOT TRAI TIM
-========================= */
+/* =====================================
+   TAO DOT TRAI TIM
+===================================== */
 
-function createHeartBurst(count = HEART_BURST_COUNT) {
+function createHeartBurst(count = 12) {
     if (!cardShown || reduceMotion) return;
 
     const currentSession = sessionId;
@@ -248,9 +293,9 @@ function createHeartBurst(count = HEART_BURST_COUNT) {
     }
 }
 
-/* =========================
-   TAO PHAO HOA NHE
-========================= */
+/* =====================================
+   TAO PHAO HOA
+===================================== */
 
 function createFirework(x, y) {
     if (!effectsLayer || !cardShown || reduceMotion) return;
@@ -262,13 +307,12 @@ function createFirework(x, y) {
     }
 
     const firework = document.createElement("div");
+
     firework.className = "firework";
     firework.style.left = `${x}%`;
     firework.style.top = `${y}%`;
 
     const fragment = document.createDocumentFragment();
-
-    /* Giam so hat phao hoa tren dien thoai */
     const particleCount = isMobile ? 14 : 22;
 
     for (let i = 0; i < particleCount; i++) {
@@ -304,7 +348,6 @@ function createFirework(x, y) {
         fragment.appendChild(particle);
     }
 
-    /* Them it tia sang nho */
     const sparkCount = isMobile ? 0 : 6;
 
     for (let i = 0; i < sparkCount; i++) {
@@ -341,9 +384,9 @@ function createFirework(x, y) {
     }, 1600, currentSession);
 }
 
-/* =========================
+/* =====================================
    BAN PHAO HOA
-========================= */
+===================================== */
 
 function launchFireworks() {
     if (!cardShown || reduceMotion) return;
@@ -370,19 +413,15 @@ function launchFireworks() {
     });
 }
 
-/* =========================
-   HIEU UNG THEM YEU THUONG
-========================= */
+/* =====================================
+   THEM YEU THUONG
+===================================== */
 
 function launchLoveStorm() {
     if (!cardShown || reduceMotion) return;
 
     createHeartBurst(isMobile ? 12 : 18);
 }
-
-/* =========================
-   NUT THEM YEU THUONG
-========================= */
 
 moreHeartsButton.addEventListener("click", function () {
     if (
@@ -412,9 +451,9 @@ moreHeartsButton.addEventListener("click", function () {
     }, 2000, currentSession);
 });
 
-/* =========================
-   QUAY LAI MAN HINH NHAP TEN
-========================= */
+/* =====================================
+   QUAY LAI VA DOI TEN
+===================================== */
 
 backButton.addEventListener("click", function () {
     cardShown = false;
@@ -429,8 +468,8 @@ backButton.addEventListener("click", function () {
     recipientInput.focus();
 });
 
-/* =========================
+/* =====================================
    KHOI TAO
-========================= */
+===================================== */
 
 createStars();
