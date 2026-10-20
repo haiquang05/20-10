@@ -350,35 +350,43 @@ function createFirework(x, y, heartShape = false) {
 
 
 /* BAN PHAO HOA NHIEU MAU VA PHAO HOA TRAI TIM */
+
 function launchFireworks() {
     if (!cardShown || reduceMotion) return;
 
     const currentSession = sessionId;
 
-    const positions = isMobile
-        ? [
-            { x: 22, y: 27, heart: true },
-            { x: 77, y: 33, heart: false },
-            { x: 49, y: 19, heart: true }
-        ]
-        : [
-            { x: 18, y: 27, heart: false },
-            { x: 78, y: 29, heart: true },
-            { x: 49, y: 18, heart: false }
-        ];
+    // So dot phao hoa trong moi dot bam
+    const total = isMobile ? 5 : 8;
 
-    positions.forEach((position, index) => {
-        scheduleEffect(() => {
-            if (!cardShown) return;
+    function launchRandomFirework(index) {
+        if (!cardShown || currentSession !== sessionId) return;
 
-            createFirework(
-                position.x + (Math.random() * 8 - 4),
-                position.y + (Math.random() * 8 - 4),
-                position.heart
-            );
-        }, index * 450, currentSession);
-    });
+        // Vi tri ngau nhien, tranh sat mep man hinh
+        const x = 10 + Math.random() * 80;
+        const y = 12 + Math.random() * 48;
+
+        // Chon ngau nhien phao hoa tron hoac hinh trai tim
+        const heartShape = Math.random() < 0.4;
+
+        createFirework(x, y, heartShape);
+
+        // Khoang cach giua cac lan no khong co dinh
+        if (index + 1 < total) {
+            const delay = 250 + Math.random() * 750;
+
+            scheduleEffect(() => {
+                launchRandomFirework(index + 1);
+            }, delay, currentSession);
+        }
+    }
+
+    // Khong no ngay lap tuc tat ca, ma lan luot bat dau
+    scheduleEffect(() => {
+        launchRandomFirework(0);
+    }, 100 + Math.random() * 500, currentSession);
 }
+
 
 
 /* NUT THEM YEU THUONG */
