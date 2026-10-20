@@ -1,11 +1,10 @@
 
 :root {
-    --pink: #ff9fca;
-    --pink-light: #ffe0ef;
-    --pink-dark: #d95c9b;
-    --purple: #351b3d;
-    --text: #fff1f7;
-    --muted: #d7bbd0;
+    --pink: #ff75a8;
+    --pink-dark: #e84e8b;
+    --pink-light: #fff0f6;
+    --text: #684052;
+    --white: #ffffff;
 }
 
 * {
@@ -14,25 +13,23 @@
 
 html {
     min-height: 100%;
-    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
-    position: relative;
-    isolation: isolate;
-    min-height: 100vh;
     margin: 0;
-    padding: 32px 16px;
+    min-height: 100vh;
+    padding: 28px 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow-x: hidden;
-    background:
-        radial-gradient(ellipse at 15% 15%, #65304f 0, transparent 38%),
-        radial-gradient(ellipse at 85% 85%, #45244f 0, transparent 42%),
-        linear-gradient(145deg, #1b1028, #30142e 55%, #1d1027);
-    color: var(--text);
     font-family: "Montserrat", sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(ellipse at 15% 15%, #ffe0eb 0, transparent 38%),
+        radial-gradient(ellipse at 85% 80%, #f8dfff 0, transparent 35%),
+        linear-gradient(135deg, #fff8fb, #ffeaf2 55%, #fff4fa);
 }
 
 button,
@@ -42,88 +39,98 @@ input {
 
 button {
     -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-}
-
-.background-glow {
-    position: fixed;
-    z-index: -1;
-    top: 50%;
-    left: 50%;
-    width: min(80vw, 700px);
-    aspect-ratio: 1;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background: #d65a9a;
-    filter: blur(140px);
-    opacity: 0.12;
-    pointer-events: none;
 }
 
 .app {
-    position: relative;
-    z-index: 1;
     width: 100%;
-    max-width: 620px;
+    max-width: 680px;
     margin: auto;
+    position: relative;
+    z-index: 2;
 }
 
 .panel {
     position: relative;
     width: 100%;
-    padding: clamp(26px, 6vw, 48px);
+    padding: 38px 34px;
     overflow: hidden;
     text-align: center;
-    border: 1px solid rgba(255, 214, 237, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.9);
     border-radius: 28px;
-    background: linear-gradient(
-        145deg,
-        rgba(77, 36, 73, 0.88),
-        rgba(37, 20, 45, 0.94)
-    );
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
-    backdrop-filter: blur(12px);
-    animation: panel-appear 0.6s ease both;
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 14px 45px rgba(202, 105, 145, 0.13);
+    animation: panel-appear 0.55s ease both;
 }
 
 .hidden {
     display: none !important;
 }
 
-.tiny-heart {
-    color: var(--pink);
-    font-size: 36px;
-    animation: heartbeat 1.8s ease-in-out infinite;
+@keyframes panel-appear {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .eyebrow {
-    margin: 8px 0 16px;
-    color: var(--pink);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 3px;
+    margin: 0 0 16px;
+    color: var(--pink-dark);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    line-height: 1.8;
 }
 
-h1,
-h2,
-.signature,
-.quote {
-    font-family: "Dancing Script", cursive;
-}
-
-h1 {
+.main-title,
+.card-title {
     margin: 0;
-    font-size: clamp(38px, 8vw, 56px);
-    line-height: 1.15;
-    color: var(--pink-light);
+    color: #d94e88;
+    font-family: "Dancing Script", cursive;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.main-title {
+    font-size: clamp(32px, 6vw, 46px);
 }
 
 .intro {
-    max-width: 390px;
-    margin: 18px auto 30px;
-    color: var(--muted);
+    margin: 18px auto 0;
+    max-width: 480px;
     font-size: 14px;
-    line-height: 1.8;
+    line-height: 1.9;
+    color: #8a6678;
+}
+
+.corner-flower {
+    position: absolute;
+    top: 12px;
+    font-size: 35px;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.flower-left {
+    left: 14px;
+    transform: rotate(-15deg);
+}
+
+.flower-right {
+    right: 14px;
+    transform: rotate(15deg);
+}
+
+.mini-bouquet {
+    margin: 8px auto 18px;
+    font-size: 66px;
+    line-height: 1.5;
+    filter: drop-shadow(0 5px 8px rgba(225, 110, 151, 0.12));
 }
 
 #name-form {
@@ -131,62 +138,69 @@ h1 {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
-    max-width: 380px;
-    margin: 0 auto;
+    max-width: 390px;
+    margin: 24px auto 0;
     text-align: left;
 }
 
 #name-form label {
-    color: var(--pink-light);
-    font-size: 12px;
-    font-weight: 600;
+    margin-bottom: 2px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #80566b;
 }
 
 #recipient-input {
     width: 100%;
     min-height: 50px;
-    padding: 0 16px;
-    color: white;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 190, 221, 0.3);
-    border-radius: 12px;
+    padding: 13px 16px;
+    color: #684052;
+    background: #fffafd;
+    border: 1px solid #f3c9da;
+    border-radius: 13px;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-#recipient-input::placeholder {
-    color: #bda5b9;
+    transition: border-color 0.2s ease;
 }
 
 #recipient-input:focus {
     border-color: var(--pink);
-    box-shadow: 0 0 0 3px rgba(255, 159, 202, 0.12);
+}
+
+#recipient-input::placeholder {
+    color: #c3a2b1;
 }
 
 .primary-button,
 .secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     min-height: 48px;
-    padding: 12px 22px;
-    border-radius: 999px;
-    cursor: pointer;
+    padding: 13px 22px;
+    border-radius: 14px;
     font-size: 13px;
     font-weight: 700;
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: transform 0.18s ease, background 0.18s ease;
 }
 
 .primary-button {
-    color: #471d3c;
-    border: 0;
-    background: linear-gradient(100deg, #ffd2e7, #ff9fc9);
-    box-shadow: 0 8px 22px rgba(239, 100, 168, 0.18);
+    color: white;
+    background: linear-gradient(135deg, #ff8eb8, #ed5c98);
+    border: none;
+    box-shadow: 0 5px 14px rgba(235, 91, 148, 0.18);
 }
 
-.primary-button:hover {
+.secondary-button {
+    color: #bc4e7b;
+    background: #fff4f8;
+    border: 1px solid #f4cada;
+}
+
+.primary-button:hover,
+.secondary-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(239, 100, 168, 0.28);
 }
 
 .primary-button:active,
@@ -194,407 +208,241 @@ h1 {
     transform: scale(0.98);
 }
 
-.primary-button span {
-    margin-left: 5px;
+.primary-button:disabled {
+    opacity: 0.8;
+    cursor: wait;
 }
 
-.small-note,
-.footer-note {
-    margin: 26px 0 0;
-    color: #bda5b9;
-    font-size: 10px;
-    letter-spacing: 1px;
+.small-note {
+    margin: 24px 0 0;
+    color: #b28a9c;
+    font-size: 11px;
+    line-height: 1.8;
 }
 
-/* Phong bi */
-
-.stage {
-    min-height: 440px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+#stage {
+    padding-top: 48px;
+    padding-bottom: 48px;
 }
 
 .envelope {
-    position: relative;
-    width: 150px;
-    height: 100px;
-    margin: 24px auto 30px;
-    border-radius: 6px;
-    background: #df80b0;
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+    margin: 14px 0 20px;
+    font-size: 76px;
+    line-height: 1.4;
 }
 
-.envelope-back {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: #f4b6d3;
-}
-
-.envelope-letter {
-    position: absolute;
-    z-index: 1;
-    left: 20px;
-    right: 20px;
-    top: 8px;
-    height: 78px;
-    display: grid;
-    place-items: center;
-    color: #c94788;
-    font-size: 30px;
-    background: #fff0f7;
-    border-radius: 4px;
-    animation: letter-rise 2.2s ease-in-out infinite alternate;
-}
-
-.envelope-flap {
-    position: absolute;
-    z-index: 3;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-left: 75px solid transparent;
-    border-right: 75px solid transparent;
-    border-top: 55px solid #f8c4dc;
-}
-
-.envelope-front {
-    position: absolute;
-    z-index: 2;
-    inset: 0;
-    background: #e99ac2;
-    clip-path: polygon(0 100%, 0 0, 50% 55%, 100% 0, 100% 100%);
-    border-radius: 0 0 6px 6px;
-}
-
-.letter-preview {
-    min-height: 76px;
-    margin-bottom: 18px;
-}
-
-.letter-line {
-    margin: 8px 0;
-    color: var(--pink-light);
-    font-family: "Dancing Script", cursive;
-    font-size: clamp(22px, 5vw, 30px);
-}
-
-.letter-line-second {
-    color: var(--pink);
-}
-
-/* Noi dung thiep */
-
-.card-screen {
-    padding-top: 36px;
-}
-
-.card-heart {
-    margin: 6px 0 12px;
-    color: var(--pink);
-    font-size: 44px;
-    text-shadow: 0 0 28px rgba(255, 130, 190, 0.45);
-    animation: heartbeat 1.8s ease-in-out infinite;
-}
-
-.to-line {
+#stage h2 {
     margin: 0;
-    color: var(--muted);
-    font-size: 12px;
-    letter-spacing: 2px;
+    color: #d94e88;
+    font-family: "Dancing Script", cursive;
+    font-size: clamp(30px, 6vw, 42px);
 }
 
-h2 {
-    margin: 5px 0 8px;
+#decode-button {
+    margin-top: 28px;
+}
+
+/* THIEP CHUC MUNG */
+
+.card-panel {
+    padding-top: 34px;
+    padding-bottom: 30px;
+}
+
+.card-flower {
+    margin: 4px 0 12px;
+    font-size: 28px;
+    letter-spacing: 5px;
+}
+
+.card-title {
+    font-size: clamp(31px, 6vw, 43px);
+}
+
+#name {
+    color: #e34f8d;
     overflow-wrap: anywhere;
-    color: var(--pink-light);
-    font-size: clamp(38px, 8vw, 52px);
-    line-height: 1.2;
 }
 
-.ornament {
+.card-intro {
+    margin-top: 10px;
+}
+
+/* BO HOA LON */
+
+.bouquet-wrap {
+    position: relative;
+    margin: 22px auto 26px;
+    padding: 12px 10px 16px;
+    width: min(100%, 390px);
+    border: 1px solid #f9d9e5;
+    border-radius: 24px;
+    background: linear-gradient(145deg, #fff7fb, #fff0f6);
+    overflow: hidden;
+}
+
+.bouquet-glow {
+    position: absolute;
+    width: 180px;
+    height: 150px;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: #ffe0ed;
+    opacity: 0.75;
+}
+
+.bouquet {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(100px, 22vw, 145px);
+    line-height: 1.45;
+    filter: drop-shadow(0 8px 10px rgba(211, 97, 142, 0.14));
+    animation: bouquet-float 3.5s ease-in-out infinite;
+}
+
+@keyframes bouquet-float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.bouquet-caption {
+    position: relative;
+    z-index: 1;
+    color: #c66b91;
+    font-family: "Dancing Script", cursive;
+    font-size: 23px;
+    font-weight: 600;
+}
+
+.messages {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin: 20px 0;
-    color: var(--pink);
-}
-
-.ornament::before,
-.ornament::after {
-    width: 55px;
-    height: 1px;
-    content: "";
-    background: rgba(255, 159, 202, 0.45);
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 .message {
-    color: #f5e4ef;
+    margin: 0;
     font-size: 13px;
-    line-height: 1.95;
-    text-align: left;
-}
-
-.message p {
-    margin: 0 0 14px;
+    line-height: 2;
+    color: #79566a;
+    overflow-wrap: anywhere;
 }
 
 .wishes {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin: 24px 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 25px 0;
 }
 
 .wishes span {
-    padding: 9px 12px;
-    color: var(--pink-light);
-    background: rgba(255, 159, 202, 0.09);
-    border: 1px solid rgba(255, 159, 202, 0.2);
-    border-radius: 999px;
-    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 10px 12px;
+    border: 1px solid #f8d8e5;
+    border-radius: 13px;
+    background: #fff6fa;
+    color: #b84e7c;
+    font-size: 11px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
 }
 
 .quote {
-    margin: 24px 0;
-    color: var(--pink);
-    font-size: clamp(21px, 5vw, 27px);
-    line-height: 1.5;
+    margin: 25px 0;
+    padding: 20px 16px;
+    color: #c74f86;
+    background: #fff0f6;
+    border-left: 3px solid #f18ab3;
+    border-radius: 0 14px 14px 0;
+    font-family: "Dancing Script", cursive;
+    font-size: clamp(22px, 5vw, 29px);
+    line-height: 1.7;
+    overflow-wrap: anywhere;
 }
 
-.signature-block {
-    margin: 20px 0 26px;
-    text-align: right;
+.final-message {
+    margin-top: 26px;
 }
 
-.sign-label {
+/* CHU KY NGUOI GUI */
+
+.signature-box {
+    margin: 32px auto 0;
+    padding: 22px 14px;
+    border-top: 1px dashed #edbfd1;
+    border-bottom: 1px dashed #edbfd1;
+    background: linear-gradient(135deg, #fffafd, #fff1f7);
+    border-radius: 15px;
+}
+
+.signature-flower {
+    margin-bottom: 8px;
+    font-size: 30px;
+}
+
+.signature-label {
     margin: 0;
-    color: var(--muted);
+    color: #a27c8e;
     font-size: 11px;
+    letter-spacing: 1px;
 }
 
-.signature {
-    margin: 4px 0 0;
-    color: var(--pink-light);
-    font-size: 27px;
+.signature-name {
+    margin: 8px 0;
+    color: #d94e88;
+    font-family: "Dancing Script", cursive;
+    font-size: 36px;
+    font-weight: 700;
 }
+
+.signature-note {
+    margin: 0;
+    color: #a27c8e;
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+/* CAC NUT CUOI THIEP */
 
 .button-group {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 14px;
+    margin-top: 32px;
 }
 
-.secondary-button {
-    color: var(--pink-light);
-    border: 1px solid rgba(255, 190, 221, 0.32);
-    background: rgba(255, 255, 255, 0.04);
+.button-group button {
+    margin-top: 4px;
 }
 
-.secondary-button:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
+/* HIEU UNG */
 
-.card-decoration {
-    position: absolute;
-    color: rgba(255, 159, 202, 0.35);
-    pointer-events: none;
-}
-
-.decoration-one {
-    top: 25px;
-    left: 25px;
-    font-size: 28px;
-}
-
-.decoration-two {
-    right: 25px;
-    bottom: 80px;
-    font-size: 34px;
-}
-
-/* Sao nen */
-
-.star-layer,
-.effects-layer {
+#star-layer,
+#effects-layer {
     position: fixed;
     inset: 0;
     overflow: hidden;
     pointer-events: none;
 }
 
-.star-layer {
-    z-index: -1;
+#star-layer {
+    z-index: 0;
 }
 
-.effects-layer {
-    z-index: 100;
-    overflow: hidden;
-}
-
-/* Trai tim lon bay len */
-
-.floating-heart {
-    position: fixed;
-    bottom: -45px;
-    left: var(--x);
-    z-index: 110;
-    color: var(--heart-color, #ff9fca);
-    font-size: var(--heart-size, 32px);
-    font-weight: 700;
-    line-height: 1;
-    user-select: none;
-    pointer-events: none;
-    will-change: transform, opacity;
-    text-shadow:
-        0 0 8px rgba(255, 150, 210, 0.75),
-        0 0 20px rgba(255, 90, 180, 0.4);
-    filter: drop-shadow(0 0 7px rgba(255, 120, 190, 0.25));
-    animation: heart-float var(--duration, 3.5s) ease-out forwards;
-}
-
-@keyframes heart-float {
-    0% {
-        opacity: 0;
-        transform: translate3d(0, 0, 0) rotate(0deg) scale(0.4);
-    }
-    12% {
-        opacity: 1;
-        transform: translate3d(0, -8vh, 0) rotate(12deg) scale(1.1);
-    }
-    100% {
-        opacity: 0;
-        transform:
-            translate3d(var(--drift, 30px), -110vh, 0)
-            rotate(var(--rotation, 40deg))
-            scale(1.35);
-    }
-}
-
-/* Phao hoa */
-
-.firework {
-    position: fixed;
-    z-index: 120;
-    width: 1px;
-    height: 1px;
-    pointer-events: none;
-}
-
-.firework-particle {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: var(--particle-size, 7px);
-    height: var(--particle-size, 7px);
-    border-radius: 50%;
-    background: var(--particle-color, #ffacd5);
-    box-shadow:
-        0 0 6px var(--particle-color, #ffacd5),
-        0 0 14px var(--particle-color, #ffacd5);
-    opacity: 0;
-    animation: firework-explode var(--particle-duration, 1.3s)
-        cubic-bezier(0.12, 0.65, 0.3, 1) forwards;
-    will-change: transform, opacity;
-}
-
-@keyframes firework-explode {
-    0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(0.3);
-    }
-    15% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-        transform:
-            translate(
-                calc(-50% + var(--dx)),
-                calc(-50% + var(--dy))
-            )
-            scale(0.15);
-    }
-}
-
-.firework-spark {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 3px;
-    height: 16px;
-    border-radius: 999px;
-    background: linear-gradient(
-        to bottom,
-        #fff8fc,
-        var(--particle-color, #ff9fca),
-        transparent
-    );
-    transform-origin: center top;
-    opacity: 0;
-    animation: spark-explode var(--particle-duration, 1.2s) ease-out forwards;
-}
-
-@keyframes spark-explode {
-    0% {
-        opacity: 1;
-        transform: rotate(var(--angle)) translateY(0) scaleY(0.2);
-    }
-    100% {
-        opacity: 0;
-        transform:
-            rotate(var(--angle))
-            translateY(var(--distance))
-            scaleY(1);
-    }
-}
-
-/* Trang tri */
-
-#more-hearts {
-    box-shadow:
-        0 0 16px rgba(255, 135, 195, 0.3),
-        0 8px 24px rgba(239, 100, 168, 0.18);
-}
-
-#more-hearts:hover {
-    box-shadow:
-        0 0 24px rgba(255, 135, 195, 0.55),
-        0 10px 32px rgba(239, 100, 168, 0.3);
-}
-
-/* Animation chung */
-
-@keyframes panel-appear {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.12); }
-}
-
-@keyframes letter-rise {
-    from { transform: translateY(0); }
-    to { transform: translateY(-12px); }
-}
-
-@keyframes twinkle {
-    from { opacity: 0.2; transform: scale(0.7); }
-    to { opacity: 0.8; transform: scale(1.2); }
+#effects-layer {
+    z-index: 5;
 }
 
 .star {
@@ -602,221 +450,182 @@ h2 {
     width: 3px;
     height: 3px;
     border-radius: 50%;
-    background: #ffe4f2;
-    opacity: 0.5;
-    animation: twinkle 3s ease-in-out infinite alternate;
+    background: white;
+    opacity: 0.75;
+    animation: twinkle 4s ease-in-out infinite alternate;
 }
 
-@media (max-width: 480px) {
+@keyframes twinkle {
+    from {
+        opacity: 0.25;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 0.9;
+        transform: scale(1.25);
+    }
+}
+
+.floating-heart {
+    position: absolute;
+    left: var(--x);
+    bottom: -35px;
+    color: var(--heart-color);
+    font-size: var(--heart-size);
+    line-height: 1;
+    text-shadow: 0 2px 6px rgba(255, 105, 165, 0.15);
+    animation: heart-rise var(--duration) ease-out forwards;
+    will-change: transform, opacity;
+}
+
+@keyframes heart-rise {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) rotate(0);
+    }
+
+    12% {
+        opacity: 0.9;
+    }
+
+    85% {
+        opacity: 0.75;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(var(--drift), -110vh, 0) rotate(var(--rotation));
+    }
+}
+
+.firework {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+}
+
+.firework-particle,
+.firework-spark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--particle-size, 4px);
+    height: var(--particle-size, 4px);
+    border-radius: 50%;
+    background: var(--particle-color);
+    animation: firework-pop var(--particle-duration, 1s) ease-out forwards;
+    will-change: transform, opacity;
+}
+
+@keyframes firework-pop {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(var(--dx, 0), var(--dy, 0)) scale(0.2);
+    }
+}
+
+/* DIEN THOAI */
+
+@media (max-width: 600px) {
     body {
-        padding: 18px 12px;
-    }
-
-    .panel {
-        border-radius: 22px;
-        padding: 28px 20px;
-    }
-
-    .stage {
-        min-height: 400px;
-    }
-
-    .button-group {
-        flex-direction: column;
-    }
-
-    .button-group button {
-        width: 100%;
-    }
-
-    .message {
-        font-size: 12px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-        animation-duration: 0.8s !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* TOI UU RESPONSIVE CHO DIEN THOAI */
-
-@media (max-width: 480px) {
-    body {
-        min-height: 100svh;
         padding: 14px 10px;
-        align-items: center;
+        align-items: flex-start;
     }
 
     .app {
-        width: 100%;
-        max-width: 100%;
+        margin: auto 0;
     }
 
     .panel {
-        padding: 26px 18px;
-        border-radius: 20px;
+        padding: 30px 19px;
+        border-radius: 23px;
     }
 
-    h1 {
-        font-size: clamp(32px, 9vw, 44px);
-    }
-
-    h2 {
-        font-size: clamp(34px, 10vw, 46px);
+    .eyebrow {
+        font-size: 10px;
+        letter-spacing: 1.8px;
     }
 
     .intro {
         font-size: 13px;
     }
 
-    #recipient-input,
-    .primary-button,
-    .secondary-button {
-        min-height: 48px;
-        font-size: 13px;
+    .mini-bouquet {
+        font-size: 58px;
+    }
+
+    #name-form {
+        margin-top: 22px;
+    }
+
+    .card-panel {
+        padding: 28px 17px;
+    }
+
+    .bouquet-wrap {
+        margin-top: 20px;
+        margin-bottom: 23px;
+    }
+
+    .bouquet {
+        font-size: 112px;
+    }
+
+    .messages {
+        gap: 17px;
     }
 
     .message {
         font-size: 12px;
-        line-height: 1.85;
+        line-height: 1.95;
     }
 
     .wishes {
-        gap: 7px;
+        gap: 8px;
+        margin: 22px 0;
     }
 
     .wishes span {
+        padding: 9px 7px;
         font-size: 10px;
-        padding: 8px 10px;
     }
 
     .button-group {
-        display: flex;
         flex-direction: column;
-        width: 100%;
+        gap: 12px;
+        margin-top: 30px;
     }
 
     .button-group button {
         width: 100%;
+        min-height: 48px;
+        margin-top: 0;
     }
 
-    .decoration-one {
-        top: 12px;
-        left: 12px;
+    .signature-name {
+        font-size: 33px;
     }
 
-    .decoration-two {
-        right: 12px;
-    }
-
-    /* Giam so hat phao hoa va do nang hieu ung tren man hinh nho */
-    .firework-particle {
-        box-shadow: 0 0 7px var(--particle-color, #ffacd5);
-    }
-
-    .floating-heart {
-        text-shadow: 0 0 8px rgba(255, 150, 210, 0.6);
+    .corner-flower {
+        font-size: 27px;
     }
 }
 
-@media (max-width: 360px) {
-    body {
-        padding: 10px 7px;
-    }
+/* Giam chuyen dong neu thiet bi yeu hoac nguoi dung chon giam hieu ung */
 
-    .panel {
-        padding: 23px 14px;
-    }
-
-    .eyebrow {
-        font-size: 9px;
-        letter-spacing: 2px;
-    }
-
-    .message {
-        font-size: 11px;
-    }
-
-    .quote {
-        font-size: 21px;
-    }
-}
-
-/* =====================================
-   TOI UU HIEU UNG THIEP 20/10
-   UU TIEN DIEN THOAI
-===================================== */
-
-/* Han che cac hieu ung phat sang nang */
-.firework-particle,
-.firework-spark {
-    box-shadow: none !important;
-    filter: none !important;
-}
-
-.floating-heart {
-    text-shadow: none !important;
-    filter: none !important;
-}
-
-/* Tranh hieu ung lam mo toan bo man hinh */
-#effects-layer {
-    pointer-events: none;
-}
-
-/* Toi uu hien thi tren dien thoai */
-@media (max-width: 600px) {
-    .firework-particle,
-    .firework-spark {
-        box-shadow: none !important;
-        filter: none !important;
-    }
-
-    .floating-heart {
-        text-shadow: none !important;
-        filter: none !important;
-    }
-
-    .star {
-        box-shadow: none !important;
-        filter: none !important;
-    }
-
-    #more-hearts,
-    #back-button,
-    #decode-button {
-        touch-action: manipulation;
-    }
-}
-
-/* Ton trong cai dat giam chuyen dong cua thiet bi */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
         scroll-behavior: auto !important;
-    }
-
-    .floating-heart,
-    .firework-particle,
-    .firework-spark,
-    .star {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
-}
-.button-group {
-    margin-top: 28px;
-}
-
-.button-group .primary-button,
-.button-group .secondary-button {
-    margin-top: 8px;
 }
